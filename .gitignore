@@ -67,3 +67,5 @@ Obj
 *.user
 Thumbs.db
 *.pyc
+.metadata
+.flashProjectProperties
