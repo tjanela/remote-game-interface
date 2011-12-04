@@ -1,0 +1,185 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1138\cocoasubrtf230
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\margb1800\margt1800
+\deftab708
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\f0\b\fs56 \cf0 \expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec0 PopoDescida Remote Control Datagrams\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0\fs24 \expnd0\expndtw0\kerning0
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b\fs36 \expnd0\expndtw0\kerning0
+General\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0\fs24 \expnd0\expndtw0\kerning0
+\
+All datagrams have the following structure:\
+\
+[DATAGRAM_ID][PAYLOAD][MAGIC_STRING]\
+\
+DATAGRAM_ID: 2 bytes\
+MAGIC_STRING: 10 bytes = "[!_PUMP_!]"\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b\fs36 \expnd0\expndtw0\kerning0
+Flash Client\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0\fs24 \expnd0\expndtw0\kerning0
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b \expnd0\expndtw0\kerning0
+Handshake Datagram\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0 \expnd0\expndtw0\kerning0
+\
+DATAGRAM_ID = 0x01\
+PAYLOAD = [HASH]\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b \expnd0\expndtw0\kerning0
+Score Datagram\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0 \expnd0\expndtw0\kerning0
+\
+DATAGRAM_ID = 0xF0\
+PAYLOAD = [SCORE]\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b \expnd0\expndtw0\kerning0
+Game Ended Datagram\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0 \expnd0\expndtw0\kerning0
+\
+DATAGRAM_ID = 0xF1\
+PAYLOAD = [SCORE]\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b\fs36 \expnd0\expndtw0\kerning0
+iOS Client\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0\fs24 \expnd0\expndtw0\kerning0
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b \expnd0\expndtw0\kerning0
+Handshake Datagram\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0 \expnd0\expndtw0\kerning0
+\
+DATAGRAM_ID = 0x03\
+PAYLOAD = [HASH]\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b \expnd0\expndtw0\kerning0
+Remote Control Accelerometer Data Datagram\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0 \expnd0\expndtw0\kerning0
+\
+DATAGRAM_ID = 0x10\
+PAYLOAD = [ACCELEROMETER_X][ACCELEROMETER_Y]\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b \expnd0\expndtw0\kerning0
+Remote Control Button Data Datagram\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0 \expnd0\expndtw0\kerning0
+\
+DATAGRAM_ID = 0x11\
+PAYLOAD = [BUTTON_CODE]\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b \expnd0\expndtw0\kerning0
+Remote Control Player Name Datagram\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0 \expnd0\expndtw0\kerning0
+\
+DATAGRAM_ID = 0x20\
+PAYLOAD = [PLAYER_NAME]\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b \expnd0\expndtw0\kerning0
+Remote Control Start Game Datagram\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0 \expnd0\expndtw0\kerning0
+\
+DATAGRAM_ID = 0x30\
+PAYLOAD = [START_GAME_PAYLOAD]\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b \expnd0\expndtw0\kerning0
+Remote Control Replay Datagram\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0 \expnd0\expndtw0\kerning0
+\
+DATAGRAM_ID = 0x31\
+PAYLOAD = [REPLAY_PAYLOAD]\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b \expnd0\expndtw0\kerning0
+Remote Control Exit Datagram\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0 \expnd0\expndtw0\kerning0
+\
+DATAGRAM_ID = 0x32\
+PAYLOAD = [EXIT_PAYLOAD]\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b\fs36 \expnd0\expndtw0\kerning0
+Server\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0\fs24 \expnd0\expndtw0\kerning0
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b \expnd0\expndtw0\kerning0
+Flash Client Handshake Response\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0 \expnd0\expndtw0\kerning0
+\
+DATAGRAM_ID = 0x02\
+PAYLOAD = [HASH][ERROR_CODE]\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b \expnd0\expndtw0\kerning0
+iOS Client Handshake Response\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab708\pardirnatural
+
+\b0 \expnd0\expndtw0\kerning0
+\
+DATAGRAM_ID = 0x04\
+PAYLOAD = [HASH][ERROR_CODE]\
+\
+}

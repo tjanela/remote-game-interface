@@ -1,0 +1,536 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E265FA1F148AA43D004A1114 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E265FA1E148AA43D004A1114 /* UIKit.framework */; };
+		E265FA21148AA43D004A1114 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E265FA20148AA43D004A1114 /* Foundation.framework */; };
+		E265FA23148AA43D004A1114 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E265FA22148AA43D004A1114 /* CoreGraphics.framework */; };
+		E265FA29148AA43D004A1114 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E265FA27148AA43D004A1114 /* InfoPlist.strings */; };
+		E265FA2B148AA43D004A1114 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E265FA2A148AA43D004A1114 /* main.m */; };
+		E265FA2F148AA43D004A1114 /* RGIAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E265FA2E148AA43D004A1114 /* RGIAppDelegate.m */; };
+		E265FA3A148AA449004A1114 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E265FA20148AA43D004A1114 /* Foundation.framework */; };
+		E265FA40148AA449004A1114 /* RGIRemoteGameInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = E265FA3F148AA449004A1114 /* RGIRemoteGameInterface.m */; };
+		E265FA4C148ACD17004A1114 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E265FA20148AA43D004A1114 /* Foundation.framework */; };
+		E265FA52148ACD17004A1114 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = E265FA51148ACD17004A1114 /* GCDAsyncSocket.m */; };
+		E265FA5A148ACD3A004A1114 /* libGCDAsyncSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E265FA4B148ACD17004A1114 /* libGCDAsyncSocket.a */; };
+		E265FA5B148ACD3A004A1114 /* libRemoteGameInterface.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E265FA39148AA449004A1114 /* libRemoteGameInterface.a */; };
+		E265FA5E148ACE66004A1114 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = E265FA50148ACD17004A1114 /* GCDAsyncSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E265FA5F148ACE71004A1114 /* RGIPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = E265FA45148AA760004A1114 /* RGIPacket.m */; };
+		E265FA60148ACE75004A1114 /* RGIPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = E265FA44148AA760004A1114 /* RGIPacket.h */; };
+		E265FA61148ACE7D004A1114 /* RGIRemoteGameInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = E265FA3E148AA449004A1114 /* RGIRemoteGameInterface.h */; };
+		E265FA64148AFCD6004A1114 /* RGITestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E265FA63148AFCD6004A1114 /* RGITestViewController.m */; };
+		E265FA66148B0073004A1114 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E265FA65148B0073004A1114 /* CFNetwork.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E265FA56148ACD33004A1114 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E265FA11148AA43D004A1114 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E265FA38148AA449004A1114;
+			remoteInfo = RemoteGameInterface;
+		};
+		E265FA58148ACD33004A1114 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E265FA11148AA43D004A1114 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E265FA4A148ACD17004A1114;
+			remoteInfo = GCDAsyncSocket;
+		};
+		E265FA5C148ACE4D004A1114 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E265FA11148AA43D004A1114 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E265FA4A148ACD17004A1114;
+			remoteInfo = GCDAsyncSocket;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		E265FA1A148AA43D004A1114 /* RGIApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RGIApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E265FA1E148AA43D004A1114 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		E265FA20148AA43D004A1114 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		E265FA22148AA43D004A1114 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		E265FA26148AA43D004A1114 /* RGIApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RGIApp-Info.plist"; sourceTree = "<group>"; };
+		E265FA28148AA43D004A1114 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E265FA2A148AA43D004A1114 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E265FA2C148AA43D004A1114 /* RGIApp-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RGIApp-Prefix.pch"; sourceTree = "<group>"; };
+		E265FA2D148AA43D004A1114 /* RGIAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RGIAppDelegate.h; sourceTree = "<group>"; };
+		E265FA2E148AA43D004A1114 /* RGIAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RGIAppDelegate.m; sourceTree = "<group>"; };
+		E265FA39148AA449004A1114 /* libRemoteGameInterface.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRemoteGameInterface.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E265FA3D148AA449004A1114 /* RemoteGameInterface-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RemoteGameInterface-Prefix.pch"; sourceTree = "<group>"; };
+		E265FA3E148AA449004A1114 /* RGIRemoteGameInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RGIRemoteGameInterface.h; sourceTree = "<group>"; };
+		E265FA3F148AA449004A1114 /* RGIRemoteGameInterface.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RGIRemoteGameInterface.m; sourceTree = "<group>"; };
+		E265FA44148AA760004A1114 /* RGIPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RGIPacket.h; sourceTree = "<group>"; };
+		E265FA45148AA760004A1114 /* RGIPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RGIPacket.m; sourceTree = "<group>"; };
+		E265FA4B148ACD17004A1114 /* libGCDAsyncSocket.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGCDAsyncSocket.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E265FA4F148ACD17004A1114 /* GCDAsyncSocket-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GCDAsyncSocket-Prefix.pch"; sourceTree = "<group>"; };
+		E265FA50148ACD17004A1114 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
+		E265FA51148ACD17004A1114 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
+		E265FA62148AFCD6004A1114 /* RGITestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RGITestViewController.h; sourceTree = "<group>"; };
+		E265FA63148AFCD6004A1114 /* RGITestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RGITestViewController.m; sourceTree = "<group>"; };
+		E265FA65148B0073004A1114 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E265FA17148AA43D004A1114 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E265FA66148B0073004A1114 /* CFNetwork.framework in Frameworks */,
+				E265FA5A148ACD3A004A1114 /* libGCDAsyncSocket.a in Frameworks */,
+				E265FA5B148ACD3A004A1114 /* libRemoteGameInterface.a in Frameworks */,
+				E265FA1F148AA43D004A1114 /* UIKit.framework in Frameworks */,
+				E265FA21148AA43D004A1114 /* Foundation.framework in Frameworks */,
+				E265FA23148AA43D004A1114 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E265FA36148AA449004A1114 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E265FA3A148AA449004A1114 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E265FA48148ACD17004A1114 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E265FA4C148ACD17004A1114 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E265FA0F148AA43D004A1114 = {
+			isa = PBXGroup;
+			children = (
+				E265FA65148B0073004A1114 /* CFNetwork.framework */,
+				E265FA24148AA43D004A1114 /* RGIApp */,
+				E265FA3B148AA449004A1114 /* RemoteGameInterface */,
+				E265FA4D148ACD17004A1114 /* GCDAsyncSocket */,
+				E265FA1D148AA43D004A1114 /* Frameworks */,
+				E265FA1B148AA43D004A1114 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E265FA1B148AA43D004A1114 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E265FA1A148AA43D004A1114 /* RGIApp.app */,
+				E265FA39148AA449004A1114 /* libRemoteGameInterface.a */,
+				E265FA4B148ACD17004A1114 /* libGCDAsyncSocket.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E265FA1D148AA43D004A1114 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E265FA1E148AA43D004A1114 /* UIKit.framework */,
+				E265FA20148AA43D004A1114 /* Foundation.framework */,
+				E265FA22148AA43D004A1114 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E265FA24148AA43D004A1114 /* RGIApp */ = {
+			isa = PBXGroup;
+			children = (
+				E265FA2D148AA43D004A1114 /* RGIAppDelegate.h */,
+				E265FA2E148AA43D004A1114 /* RGIAppDelegate.m */,
+				E265FA25148AA43D004A1114 /* Supporting Files */,
+				E265FA62148AFCD6004A1114 /* RGITestViewController.h */,
+				E265FA63148AFCD6004A1114 /* RGITestViewController.m */,
+			);
+			path = RGIApp;
+			sourceTree = "<group>";
+		};
+		E265FA25148AA43D004A1114 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E265FA26148AA43D004A1114 /* RGIApp-Info.plist */,
+				E265FA27148AA43D004A1114 /* InfoPlist.strings */,
+				E265FA2A148AA43D004A1114 /* main.m */,
+				E265FA2C148AA43D004A1114 /* RGIApp-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E265FA3B148AA449004A1114 /* RemoteGameInterface */ = {
+			isa = PBXGroup;
+			children = (
+				E265FA3E148AA449004A1114 /* RGIRemoteGameInterface.h */,
+				E265FA3F148AA449004A1114 /* RGIRemoteGameInterface.m */,
+				E265FA3C148AA449004A1114 /* Supporting Files */,
+				E265FA44148AA760004A1114 /* RGIPacket.h */,
+				E265FA45148AA760004A1114 /* RGIPacket.m */,
+			);
+			path = RemoteGameInterface;
+			sourceTree = "<group>";
+		};
+		E265FA3C148AA449004A1114 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E265FA3D148AA449004A1114 /* RemoteGameInterface-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E265FA4D148ACD17004A1114 /* GCDAsyncSocket */ = {
+			isa = PBXGroup;
+			children = (
+				E265FA50148ACD17004A1114 /* GCDAsyncSocket.h */,
+				E265FA51148ACD17004A1114 /* GCDAsyncSocket.m */,
+				E265FA4E148ACD17004A1114 /* Supporting Files */,
+			);
+			path = GCDAsyncSocket;
+			sourceTree = "<group>";
+		};
+		E265FA4E148ACD17004A1114 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E265FA4F148ACD17004A1114 /* GCDAsyncSocket-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		E265FA37148AA449004A1114 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E265FA60148ACE75004A1114 /* RGIPacket.h in Headers */,
+				E265FA61148ACE7D004A1114 /* RGIRemoteGameInterface.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E265FA49148ACD17004A1114 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E265FA5E148ACE66004A1114 /* GCDAsyncSocket.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		E265FA19148AA43D004A1114 /* RGIApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E265FA32148AA43D004A1114 /* Build configuration list for PBXNativeTarget "RGIApp" */;
+			buildPhases = (
+				E265FA16148AA43D004A1114 /* Sources */,
+				E265FA17148AA43D004A1114 /* Frameworks */,
+				E265FA18148AA43D004A1114 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E265FA57148ACD33004A1114 /* PBXTargetDependency */,
+				E265FA59148ACD33004A1114 /* PBXTargetDependency */,
+			);
+			name = RGIApp;
+			productName = RGIApp;
+			productReference = E265FA1A148AA43D004A1114 /* RGIApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E265FA38148AA449004A1114 /* RemoteGameInterface */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E265FA41148AA449004A1114 /* Build configuration list for PBXNativeTarget "RemoteGameInterface" */;
+			buildPhases = (
+				E265FA35148AA449004A1114 /* Sources */,
+				E265FA36148AA449004A1114 /* Frameworks */,
+				E265FA37148AA449004A1114 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E265FA5D148ACE4D004A1114 /* PBXTargetDependency */,
+			);
+			name = RemoteGameInterface;
+			productName = RemoteGameInterface;
+			productReference = E265FA39148AA449004A1114 /* libRemoteGameInterface.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		E265FA4A148ACD17004A1114 /* GCDAsyncSocket */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E265FA53148ACD17004A1114 /* Build configuration list for PBXNativeTarget "GCDAsyncSocket" */;
+			buildPhases = (
+				E265FA47148ACD17004A1114 /* Sources */,
+				E265FA48148ACD17004A1114 /* Frameworks */,
+				E265FA49148ACD17004A1114 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GCDAsyncSocket;
+			productName = GCDAsyncSocket;
+			productReference = E265FA4B148ACD17004A1114 /* libGCDAsyncSocket.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E265FA11148AA43D004A1114 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "Bliss Applications";
+			};
+			buildConfigurationList = E265FA14148AA43D004A1114 /* Build configuration list for PBXProject "RGIApp" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E265FA0F148AA43D004A1114;
+			productRefGroup = E265FA1B148AA43D004A1114 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E265FA19148AA43D004A1114 /* RGIApp */,
+				E265FA38148AA449004A1114 /* RemoteGameInterface */,
+				E265FA4A148ACD17004A1114 /* GCDAsyncSocket */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E265FA18148AA43D004A1114 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E265FA29148AA43D004A1114 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E265FA16148AA43D004A1114 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E265FA2B148AA43D004A1114 /* main.m in Sources */,
+				E265FA2F148AA43D004A1114 /* RGIAppDelegate.m in Sources */,
+				E265FA64148AFCD6004A1114 /* RGITestViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E265FA35148AA449004A1114 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E265FA40148AA449004A1114 /* RGIRemoteGameInterface.m in Sources */,
+				E265FA5F148ACE71004A1114 /* RGIPacket.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E265FA47148ACD17004A1114 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E265FA52148ACD17004A1114 /* GCDAsyncSocket.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E265FA57148ACD33004A1114 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E265FA38148AA449004A1114 /* RemoteGameInterface */;
+			targetProxy = E265FA56148ACD33004A1114 /* PBXContainerItemProxy */;
+		};
+		E265FA59148ACD33004A1114 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E265FA4A148ACD17004A1114 /* GCDAsyncSocket */;
+			targetProxy = E265FA58148ACD33004A1114 /* PBXContainerItemProxy */;
+		};
+		E265FA5D148ACE4D004A1114 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E265FA4A148ACD17004A1114 /* GCDAsyncSocket */;
+			targetProxy = E265FA5C148ACE4D004A1114 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		E265FA27148AA43D004A1114 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E265FA28148AA43D004A1114 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E265FA30148AA43D004A1114 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E265FA31148AA43D004A1114 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E265FA33148AA43D004A1114 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RGIApp/RGIApp-Prefix.pch";
+				INFOPLIST_FILE = "RGIApp/RGIApp-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		E265FA34148AA43D004A1114 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RGIApp/RGIApp-Prefix.pch";
+				INFOPLIST_FILE = "RGIApp/RGIApp-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		E265FA42148AA449004A1114 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/RemoteGameInterface.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RemoteGameInterface/RemoteGameInterface-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		E265FA43148AA449004A1114 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/RemoteGameInterface.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RemoteGameInterface/RemoteGameInterface-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		E265FA54148ACD17004A1114 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/GCDAsyncSocket.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GCDAsyncSocket/GCDAsyncSocket-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		E265FA55148ACD17004A1114 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/GCDAsyncSocket.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GCDAsyncSocket/GCDAsyncSocket-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E265FA14148AA43D004A1114 /* Build configuration list for PBXProject "RGIApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E265FA30148AA43D004A1114 /* Debug */,
+				E265FA31148AA43D004A1114 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E265FA32148AA43D004A1114 /* Build configuration list for PBXNativeTarget "RGIApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E265FA33148AA43D004A1114 /* Debug */,
+				E265FA34148AA43D004A1114 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		E265FA41148AA449004A1114 /* Build configuration list for PBXNativeTarget "RemoteGameInterface" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E265FA42148AA449004A1114 /* Debug */,
+				E265FA43148AA449004A1114 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		E265FA53148ACD17004A1114 /* Build configuration list for PBXNativeTarget "GCDAsyncSocket" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E265FA54148ACD17004A1114 /* Debug */,
+				E265FA55148ACD17004A1114 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E265FA11148AA43D004A1114 /* Project object */;
+}
