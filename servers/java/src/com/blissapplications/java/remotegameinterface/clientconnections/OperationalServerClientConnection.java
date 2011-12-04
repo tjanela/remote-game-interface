@@ -80,10 +80,12 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 	}
 
 	protected ByteBuffer readFromInputStream(InputStream inputStream, Integer maxBytes) throws Exception{
-		ByteBuffer buffer = ByteBuffer.allocate(OperationalProtocolDatagram.DATAGRAM_MIN_SIZE);
+		ByteBuffer buffer = ByteBuffer.allocate(maxBytes);
 		buffer.mark();
 		int codePoint;
 		boolean magicFound = false;
+		
+		int packetSize = 0;
 		byte[] ourMagic = new byte[OperationalProtocolDatagram.MAGIC_FIELD_LENGTH];
 		do {
 			codePoint = inputStream.read();
@@ -94,13 +96,19 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 				buffer.get(ourMagic, 0, OperationalProtocolDatagram.MAGIC_FIELD_LENGTH);
 				if(Arrays.equals(ourMagic, OperationalProtocolDatagram.MAGIC_FIELD)){
 					magicFound = true;
+					packetSize = buffer.position();
 				}
 				_logger.info("<" + buffer.position());
 			}
-		}	while (!magicFound && buffer.capacity() < OperationalProtocolDatagram.PAYLOAD_FIELD_MAX_LENGTH);
+		}	while (!magicFound && buffer.position() < maxBytes);
 
 		buffer.reset();
+		
+		ByteBuffer trimmedByteBuffer = ByteBuffer.allocate(packetSize);
+		trimmedByteBuffer.mark();
+		trimmedByteBuffer.put(buffer.array(),0,packetSize);
+		trimmedByteBuffer.reset();
 
-		return buffer;
+		return trimmedByteBuffer;
 	}
 }

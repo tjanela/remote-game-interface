@@ -16,6 +16,7 @@
 - (void) remoteGameInterfaceDidConnectSuccessfuly:(RGIRemoteGameInterface*)remoteGameInterface{
 	_stateLabel.text = @"Connected!";
 	[_textView becomeFirstResponder];
+	_clientStatus = kRGIControlClientStatus_Connected;
 }
 
 - (void) remoteGameInterface:(RGIRemoteGameInterface*)remoteGameInterface didNotConnectWithError:(NSError*)error{
@@ -24,18 +25,40 @@
 }
 
 - (void) remoteGameInterfaceRegisteredSuccessfully:(RGIRemoteGameInterface*)remoteGameInterface{
-
+	_stateLabel.text = @"Registered!";
+	_clientStatus = kRGIControlClientStatus_Registered;
 }
 
 - (void) remoteGameInterface:(RGIRemoteGameInterface*)remoteGameInterface didReceivePacket:(RGIPacket*)packet{
-
 }
 
 #pragma mark - RGI Glue
 
 - (void) connectButton_touchUpInside:(id)sender {
-	NSLog(@"Connecting...");
-	[[RGIRemoteGameInterface sharedInterface] connectToServer];
+	switch(_clientStatus){
+		case kRGIControlClientStatus_Disconnected:
+		{
+			NSLog(@"Connecting...");
+			_clientStatus = kRGIControlClientStatus_Connecting;
+			[[RGIRemoteGameInterface sharedInterface] connectToServer];
+			break;
+		}
+		case kRGIControlClientStatus_Connected:{
+			NSLog(@"Registering with hash '%@'...",_textView.text);
+			_clientStatus = kRGIControlClientStatus_Registering;
+			[[RGIRemoteGameInterface sharedInterface] registerWithHash:_textView.text];
+			
+		}
+		case kRGIControlClientStatus_Registered:{
+			NSLog(@"Sengin payload...");
+			[[RGIRemoteGameInterface sharedInterface] sendPayload:[@"HELO" dataUsingEncoding:NSUTF8StringEncoding]];
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
 }
 
 #pragma mark - Object lifecycle

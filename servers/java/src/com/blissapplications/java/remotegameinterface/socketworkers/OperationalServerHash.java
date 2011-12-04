@@ -1,18 +1,14 @@
 package com.blissapplications.java.remotegameinterface.socketworkers;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Random;
-import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
-import com.sun.xml.internal.fastinfoset.util.CharArray;
 
 /**
  * User: tjanela
@@ -72,17 +68,17 @@ public class OperationalServerHash {
 		if (!(o instanceof OperationalServerHash)) return false;
 
 		OperationalServerHash that = (OperationalServerHash) o;
-		if (!hash.equals(that.hash)) return false;
+		if (!Arrays.equals(hash,that.hash)) return false;
 		return true;
 	}
 
 	@Override
 	public int hashCode() {
-		return hash.hashCode();
+		return toString().hashCode();
 	}
 
 	@Override
 	public String toString(){
-		return hash.toString();
+		return new String(hash);
 	}
 }

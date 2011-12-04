@@ -143,7 +143,7 @@ public class OperationalServerContext {
 					pair = Pair.of(pair.fst,client);
 					_hashToPairMap.put(hash,pair);
 				}else{
-					_logger.warn("Asking to register a control client with no display client. Hash is %1$s Proceeding...");
+					_logger.warn(String.format("Asking to register a control client with no display client. Hash is %1$s Proceeding...", hash));
 					Pair<IClientConnection,IClientConnection> pair = Pair.of(null,client);
 					_hashToPairMap.put(hash,pair);
 				}

@@ -11,6 +11,9 @@
 #define RGI_HOST @"localhost"
 #define RGI_PORT 20201
 
+#define RGI_SOCKET_TIMEOUT 2
+
+#define RGI_REGISTER_CONTROL_CLIENT_TAG kRGIPacket_RegisterControlClientRequest
 
 @implementation RGIRemoteGameInterface
 
@@ -24,10 +27,14 @@
 }
 
 - (void) registerWithHash:(NSString*)hash{
-
+	RGIPacket *packet = [RGIPacket packetRequestRegisterControlClient:hash];
+	NSData *packetData = [packet data];
+	[_clientSocket writeData:packetData withTimeout:RGI_SOCKET_TIMEOUT tag:RGI_REGISTER_CONTROL_CLIENT_TAG];
 }
 - (void) sendPayload:(NSData*)payload{
-
+	RGIPacket *packet = [RGIPacket packetRequestPayload:payload];
+	NSData *packetData = [packet data];
+	[_clientSocket writeData:packetData withTimeout:RGI_SOCKET_TIMEOUT tag:RGI_REGISTER_CONTROL_CLIENT_TAG];
 }
 
 
@@ -42,6 +49,8 @@
 			[delegate remoteGameInterface:self didNotConnectWithError:error];
 		}
 	}
+	
+	[_clientSocket readDataToData:[RGIPacket magic] withTimeout:-1 buffer:nil bufferOffset:0 maxLength:RGI_MAX_PACKET_SIZE tag:0];
 }
 
 #pragma mark - GCDAsyncSocketDelegate
@@ -100,6 +109,26 @@
  **/
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag{
 	NSLog(@"socket:didReadData:withTag:");
+	
+	RGIPacket *packet = [RGIPacket decode:data];
+	if(packet != nil){
+		
+		if([RGIPacket typeFromData:packet.packetId] == kRGIPacket_RegisterControlClientResponse){
+			for(id<RGIRemoteGameInterfaceDelegate> delegate in _delegates){
+				[delegate remoteGameInterfaceRegisteredSuccessfully:self];
+			}	
+		}
+		
+		NSLog(@"Decoded packet: %@", packet);
+		for(id<RGIRemoteGameInterfaceDelegate> delegate in _delegates){
+			[delegate remoteGameInterface:self didReceivePacket:packet];
+		}
+	}else {
+		NSLog(@"Couldn't decode packet!");		
+	}
+	
+	[_clientSocket readDataToData:[RGIPacket magic] withTimeout:-1 buffer:nil bufferOffset:0 maxLength:RGI_MAX_PACKET_SIZE tag:tag];
+	
 }
 
 /**

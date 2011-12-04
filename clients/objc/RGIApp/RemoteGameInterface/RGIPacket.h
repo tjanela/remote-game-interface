@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define RGI_MAX_PACKET_SIZE 200
+
 #define ID_FIELD_LENGTH 3
 #define MAGIC_FIELD {'[','!','P','U','M','P','!',']'}
 #define MAGIC_FIELD_LENGTH 8
@@ -45,4 +47,16 @@ typedef enum {
 @property (nonatomic, copy) NSMutableData *payload;
 @property (nonatomic, copy) NSMutableData *magic;
 
+- (NSData*) data;
+
++ (RGIPacket*) packetRequestRegisterControlClient:(NSString *)hash;
++ (RGIPacket*) packetRequestUnregisterControlClient:(NSString *)hash;
++ (RGIPacket*) packetRequestPayload:(NSData *)payload;
++ (RGIPacket*) packetResponsePayload:(NSData *)payload;
+
++ (NSData*) magic;
+
++ (rgiPacketType) typeFromData:(NSData*)data;
+
++ (RGIPacket*) decode:(NSData*) data;
 @end
