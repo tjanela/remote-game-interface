@@ -2,6 +2,8 @@ package com.blissapplications.java.remotegameinterface.socketworkers;
 
 import com.blissapplications.java.remotegameinterface.clientconnections.IClientConnection;
 import com.blissapplications.java.remotegameinterface.clientconnections.OperationalServerClientConnection;
+import com.blissapplications.java.remotegameinterface.context.OperationalServerContext;
+
 import org.apache.log4j.Logger;
 
 import java.net.ServerSocket;
@@ -64,6 +66,25 @@ public class OperationalServerSocketWorker extends ServerSocketWorker {
 				_operationalServerClientConnections.remove(servedClient);
 			} else {
 				_logger.warn(String.format("Client %1$ not found on operational server internal state! Proceeding...", servedClient));
+			}
+		}
+	}
+	
+	public void clientDisconnected(IClientConnection disconnectedClient) {
+		_logger.info(String.format("Client %1$ has disconnected.", disconnectedClient));
+		synchronized (this) {
+			if (_operationalServerClientConnections.contains(disconnectedClient)) {
+				_operationalServerClientConnections.remove(disconnectedClient);
+			} else {
+				_logger.warn(String.format("Client %1$s not found on operational server internal state! Proceeding...", disconnectedClient));
+			}
+			try
+			{
+				OperationalServerContext.getOperationalServerContextInstance().handleClientDisconnection(disconnectedClient);
+			}
+			catch(Exception ex)
+			{
+				_logger.error(String.format("Client %1$s", disconnectedClient), ex);
 			}
 		}
 	}

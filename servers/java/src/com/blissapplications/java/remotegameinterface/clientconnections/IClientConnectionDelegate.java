@@ -7,4 +7,5 @@ package com.blissapplications.java.remotegameinterface.clientconnections;
  */
 public interface IClientConnectionDelegate {
 	public void clientServed(IClientConnection servedClient);
+	public void clientDisconnected(IClientConnection disconnectedClient);
 }

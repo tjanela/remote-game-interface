@@ -1,4 +1,4 @@
-package com.blissapplications.java.remotegameinterface.socketworkers;
+package com.blissapplications.java.remotegameinterface.packets;
 
 import java.nio.ByteBuffer;
 
@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
  * Date: 11/27/11
  * Time: 5:49 AM
  */
-public enum OperationalProtocolDatagramType {
+public enum OperationalProtocolPacketType {
 	//Requests
 	RegisterDisplayClientRequest	(0x010000),
 	UnregisterDisplayClientRequest	(0x010001),
@@ -22,10 +22,10 @@ public enum OperationalProtocolDatagramType {
 	UnregisterControlClientResponse	(0x02FFFE),
 	PayloadResponse					(0x03FFFF),
 
-	UnknownDatagram					(0x000000);
+	UnknownPacket					(0x000000);
 
 	private int _id;
-	private OperationalProtocolDatagramType(int id){
+	private OperationalProtocolPacketType(int id){
 		_id = id;
 	}
 
@@ -33,10 +33,10 @@ public enum OperationalProtocolDatagramType {
 		return _id;
 	}
 
-	public static byte[] getTypeBytes(OperationalProtocolDatagramType type){
+	public static byte[] getTypeBytes(OperationalProtocolPacketType type){
 		int id = type.getId();
 
-		ByteBuffer idByteBuffer = ByteBuffer.allocate(OperationalProtocolDatagram.ID_FIELD_LENGTH);
+		ByteBuffer idByteBuffer = ByteBuffer.allocate(OperationalProtocolPacket.ID_FIELD_LENGTH);
 		idByteBuffer.put((byte)((id & 0x00FF0000) >> 16));
 		idByteBuffer.put((byte)((id & 0x0000FF00) >> 8));
 		idByteBuffer.put((byte)((id & 0x000000FF)));
@@ -44,7 +44,7 @@ public enum OperationalProtocolDatagramType {
 		return idByteBuffer.array();
 	}
 
-	public static OperationalProtocolDatagramType fromInt(int id){
+	public static OperationalProtocolPacketType fromInt(int id){
 		//Requests
 		if(id == RegisterDisplayClientRequest.getId()){
 			return RegisterDisplayClientRequest;
@@ -69,7 +69,7 @@ public enum OperationalProtocolDatagramType {
 		}else if((id & PayloadResponse.getId()) == PayloadResponse.getId()){
 			return PayloadResponse;
 		}
-		return UnknownDatagram;
+		return UnknownPacket;
 	}
 
 }

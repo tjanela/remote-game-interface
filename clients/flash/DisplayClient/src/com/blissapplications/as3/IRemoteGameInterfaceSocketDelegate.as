@@ -1,1 +1,1 @@
-﻿package com.blissapplications.as3 {		public interface IRemoteGameInterfaceSocketDelegate {		function socketError(e:Error);		function socketDidReceivePacket(p:RemoteGameInterfacePacket);	}	}
+﻿package com.blissapplications.as3 {		public interface IRemoteGameInterfaceSocketDelegate {		function socketError(socket:RemoteGameInterfaceSocket,e:Error):void;		function socketConnected(socket:RemoteGameInterfaceSocket):void;		function socketDidReceivePacket(socket:RemoteGameInterfaceSocket,packet:RemoteGameInterfacePacket):void;	}	}

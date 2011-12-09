@@ -1,11 +1,12 @@
 package com.blissapplications.java.remotegameinterface.clientconnections;
 
-import com.blissapplications.java.remotegameinterface.socketworkers.OperationalProtocolDatagram;
-import com.blissapplications.java.remotegameinterface.socketworkers.OperationalServerContext;
+import com.blissapplications.java.remotegameinterface.context.OperationalServerContext;
+import com.blissapplications.java.remotegameinterface.packets.OperationalProtocolPacket;
 import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -15,7 +16,7 @@ import java.util.Arrays;
  * Time: 3:11 AM
  */
 public class OperationalServerClientConnection implements Runnable,IClientConnection  {
-	public static final Logger _logger = Logger.getLogger(PolicyServerClientConnection.class);
+	public static final Logger _logger = Logger.getLogger(OperationalServerClientConnection.class);
 
 	private Socket _clientSocket;
 
@@ -48,17 +49,24 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 		ByteBuffer response = null;
 
 		Boolean exit = Boolean.FALSE;
-
+		
 		while(!exit){
+			try{
 			request = readRequest();
 
-			if(request == null || request.capacity() == 0){
-				exit = Boolean.TRUE;
+				if(request == null || request.capacity() == 0){
+					exit = Boolean.TRUE;
 			}
-
 			
-			response = responseForRequest(request);
-			writeData(response);
+				
+				response = responseForRequest(request);
+				if(response != null){
+					writeData(response);
+				}
+			}catch(SocketException ex){
+				_delegate.clientDisconnected(this);
+				throw ex;
+			}
 
 		}
 
@@ -68,11 +76,9 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 	private ByteBuffer responseForRequest(ByteBuffer request) throws Exception{
 		return OperationalServerContext.getOperationalServerContextInstance().handleClientRequest(this,request);
 	}
-
-	public static final int MAX_REQUEST_LENGTH = 200;
 	
 	public ByteBuffer readRequest() throws Exception{
-		return readFromInputStream(_clientSocketInputStream,MAX_REQUEST_LENGTH);
+		return readFromInputStream(_clientSocketInputStream,OperationalProtocolPacket.PACKET_MAX_SIZE);
 	}
 
 	public void writeData(ByteBuffer data) throws Exception {
@@ -86,19 +92,17 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 		boolean magicFound = false;
 		
 		int packetSize = 0;
-		byte[] ourMagic = new byte[OperationalProtocolDatagram.MAGIC_FIELD_LENGTH];
+		byte[] ourMagic = new byte[OperationalProtocolPacket.MAGIC_FIELD_LENGTH];
 		do {
 			codePoint = inputStream.read();
 			buffer.put((byte)(codePoint & 0xff));
-			if(buffer.position() >= OperationalProtocolDatagram.DATAGRAM_MIN_SIZE){
-				_logger.info(">" + buffer.position());
-				buffer.position(buffer.position() - OperationalProtocolDatagram.MAGIC_FIELD_LENGTH);
-				buffer.get(ourMagic, 0, OperationalProtocolDatagram.MAGIC_FIELD_LENGTH);
-				if(Arrays.equals(ourMagic, OperationalProtocolDatagram.MAGIC_FIELD)){
+			if(buffer.position() >= OperationalProtocolPacket.PACKET_MIN_SIZE){
+				buffer.position(buffer.position() - OperationalProtocolPacket.MAGIC_FIELD_LENGTH);
+				buffer.get(ourMagic, 0, OperationalProtocolPacket.MAGIC_FIELD_LENGTH);
+				if(Arrays.equals(ourMagic, OperationalProtocolPacket.MAGIC_FIELD)){
 					magicFound = true;
 					packetSize = buffer.position();
 				}
-				_logger.info("<" + buffer.position());
 			}
 		}	while (!magicFound && buffer.position() < maxBytes);
 

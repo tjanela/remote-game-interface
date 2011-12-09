@@ -1,4 +1,4 @@
-package com.blissapplications.java.remotegameinterface.socketworkers;
+package com.blissapplications.java.remotegameinterface.context;
 
 
 import java.nio.ByteBuffer;

@@ -1,6 +1,7 @@
-package com.blissapplications.java.remotegameinterface.socketworkers;
+package com.blissapplications.java.remotegameinterface.context;
 
 import com.blissapplications.java.remotegameinterface.clientconnections.IClientConnection;
+import com.blissapplications.java.remotegameinterface.packets.OperationalProtocolPacket;
 import com.sun.tools.javac.util.Pair;
 import org.apache.log4j.Logger;
 
@@ -29,39 +30,39 @@ public class OperationalServerContext {
 
 	public ByteBuffer handleClientRequest(IClientConnection client, ByteBuffer rawRequest) throws Exception{
 
-		OperationalProtocolDatagram request = OperationalProtocolDatagram.decode(rawRequest);
-		OperationalProtocolDatagram response = null;
+		OperationalProtocolPacket request = OperationalProtocolPacket.decode(rawRequest);
+		OperationalProtocolPacket response = null;
 
-		switch (request._datagramType){
+		switch (request._packetType){
 		case RegisterDisplayClientRequest:
 		{
 			OperationalServerHash hash = registerDisplayClient(client);
-			response = OperationalProtocolDatagram.getRegisterDisplayClientResponse(hash);
+			response = OperationalProtocolPacket.getRegisterDisplayClientResponse(hash);
 			break;
 		}
 		case UnregisterDisplayClientRequest:
 		{
 			OperationalServerHash hash = _displayClientHashes.get(client);
 			IClientConnection controlClient = getControlClient(hash);
-			response = OperationalProtocolDatagram.getUnregisterDisplayClientResponse(hash);
-			controlClient.writeData(OperationalProtocolDatagram.encode(response));
+			response = OperationalProtocolPacket.getUnregisterDisplayClientResponse(hash);
+			controlClient.writeData(OperationalProtocolPacket.encode(response));
 			break;
 		}
 		case RegisterControlClientRequest:
 		{
 			OperationalServerHash hash = OperationalServerHash.fromByteArray(request.getPayload());
 			registerControlClient(hash, client);
-			response = OperationalProtocolDatagram.getRegisterControlClientResponse(hash);
+			response = OperationalProtocolPacket.getRegisterControlClientResponse(hash);
 			IClientConnection displayClient = getDisplayClient(hash);
-			displayClient.writeData(OperationalProtocolDatagram.encode(response));
+			displayClient.writeData(OperationalProtocolPacket.encode(response));
 			break;
 		}
 		case UnregisterControlClientRequest:
 		{
 			OperationalServerHash hash = _controlClientHashes.get(client);
 			IClientConnection displayClient = getDisplayClient(hash);
-			response = OperationalProtocolDatagram.getUnregisterControlClientResponse(hash);
-			displayClient.writeData(OperationalProtocolDatagram.encode(response));
+			response = OperationalProtocolPacket.getUnregisterControlClientResponse(hash);
+			displayClient.writeData(OperationalProtocolPacket.encode(response));
 			break;
 		}
 		case PayloadRequest:
@@ -69,14 +70,14 @@ public class OperationalServerContext {
 			if(isDisplayClient(client)){
 				OperationalServerHash hash = _displayClientHashes.get(client);
 				IClientConnection controlClient = getControlClient(hash);
-				response = OperationalProtocolDatagram.getPayloadResponse();
-				controlClient.writeData(OperationalProtocolDatagram.encode(request));
+				response = OperationalProtocolPacket.getPayloadResponse();
+				controlClient.writeData(OperationalProtocolPacket.encode(request));
 			}
 			else if(isControlClient(client)){
 				OperationalServerHash hash = _controlClientHashes.get(client);
 				IClientConnection displayClient = getDisplayClient(hash);
-				response = OperationalProtocolDatagram.getPayloadResponse();
-				displayClient.writeData(OperationalProtocolDatagram.encode(request));
+				response = OperationalProtocolPacket.getPayloadResponse();
+				displayClient.writeData(OperationalProtocolPacket.encode(request));
 			}
 			else{
 				_logger.info("Huchy mama...");
@@ -89,22 +90,38 @@ public class OperationalServerContext {
 		case UnregisterControlClientResponse:
 		case PayloadResponse:
 			break;
-		case UnknownDatagram:
+		case UnknownPacket:
 			break;
 		default:
 			break;
 		}
 
-		return OperationalProtocolDatagram.encode(response);
+		return OperationalProtocolPacket.encode(response);
 	}
 
 	public void handleClientDisconnection(IClientConnection client) throws Exception{
 		if(isControlClient(client)){
-
+			OperationalServerHash hash = _controlClientHashes.get(client);
+			
+			if(hash == null){
+				throw new Exception("Client not registered!");
+			}
+			
+			IClientConnection displayClient = getDisplayClient(hash);
+			OperationalProtocolPacket packet = OperationalProtocolPacket.getUnregisterDisplayClientRequest(hash);
+			displayClient.writeData(OperationalProtocolPacket.encode(packet));
 		}else if(isDisplayClient(client)){
-
+			OperationalServerHash hash = _displayClientHashes.get(client);
+			
+			if(hash == null){
+				throw new Exception("Client not registered!");
+			}
+			
+			IClientConnection controlClient = getControlClient(hash);
+			OperationalProtocolPacket packet = OperationalProtocolPacket.getUnregisterControlClientRequest(hash);
+			controlClient.writeData(OperationalProtocolPacket.encode(packet));
 		}else {
-
+			_logger.info("Disconnect from unknown client...");
 		}
 	}
 
