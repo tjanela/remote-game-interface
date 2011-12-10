@@ -31,6 +31,7 @@
 	NSData *packetData = [packet data];
 	[_clientSocket writeData:packetData withTimeout:RGI_SOCKET_TIMEOUT tag:RGI_REGISTER_CONTROL_CLIENT_TAG];
 }
+
 - (void) sendPayload:(NSData*)payload{
 	RGIPacket *packet = [RGIPacket packetRequestPayload:payload];
 	NSData *packetData = [packet data];
@@ -50,7 +51,7 @@
 		}
 	}
 	
-	[_clientSocket readDataToData:[RGIPacket magic] withTimeout:-1 buffer:nil bufferOffset:0 maxLength:RGI_MAX_PACKET_SIZE tag:0];
+	[_clientSocket readDataToData:[RGIPacket magic] withTimeout:-1 maxLength:RGI_MAX_PACKET_SIZE tag:0];
 }
 
 #pragma mark - GCDAsyncSocketDelegate
@@ -111,6 +112,7 @@
 	NSLog(@"socket:didReadData:withTag:");
 	
 	RGIPacket *packet = [RGIPacket decode:data];
+	NSUInteger offset = 0;
 	if(packet != nil){
 		
 		if([RGIPacket typeFromData:packet.packetId] == kRGIPacket_RegisterControlClientResponse){
@@ -123,11 +125,13 @@
 		for(id<RGIRemoteGameInterfaceDelegate> delegate in _delegates){
 			[delegate remoteGameInterface:self didReceivePacket:packet];
 		}
+		offset = [[packet data] length];
 	}else {
 		NSLog(@"Couldn't decode packet!");		
 	}
+	NSLog(@"Data has length: %d",offset);
 	
-	[_clientSocket readDataToData:[RGIPacket magic] withTimeout:-1 buffer:nil bufferOffset:0 maxLength:RGI_MAX_PACKET_SIZE tag:tag];
+	[_clientSocket readDataToData:[RGIPacket magic] withTimeout:-1 maxLength:RGI_MAX_PACKET_SIZE tag:tag];
 	
 }
 

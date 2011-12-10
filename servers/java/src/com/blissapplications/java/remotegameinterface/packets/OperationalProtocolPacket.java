@@ -104,6 +104,7 @@ public class OperationalProtocolPacket {
 		OperationalProtocolPacket decodedRequest = new OperationalProtocolPacket();
 
 		int payloadSize = request.capacity() - ID_FIELD_LENGTH - MAGIC_FIELD_LENGTH;
+		decodedRequest._payload = new byte[payloadSize];
 		
 		request.get(decodedRequest._id, 0, ID_FIELD_LENGTH);
 		request.get(decodedRequest._payload, 0, payloadSize);

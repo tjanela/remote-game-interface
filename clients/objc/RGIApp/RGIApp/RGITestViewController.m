@@ -15,21 +15,80 @@
 
 - (void) remoteGameInterfaceDidConnectSuccessfuly:(RGIRemoteGameInterface*)remoteGameInterface{
 	_stateLabel.text = @"Connected!";
+	[_connectButton setTitle:@"Register" forState:UIControlStateNormal];
 	[_textView becomeFirstResponder];
 	_clientStatus = kRGIControlClientStatus_Connected;
 }
 
 - (void) remoteGameInterface:(RGIRemoteGameInterface*)remoteGameInterface didNotConnectWithError:(NSError*)error{
 	_stateLabel.text = @"Not Connected!";
+	[_connectButton setTitle:@"Connect" forState:UIControlStateNormal];
 	NSLog(@"Error: %@",error);
 }
 
 - (void) remoteGameInterfaceRegisteredSuccessfully:(RGIRemoteGameInterface*)remoteGameInterface{
 	_stateLabel.text = @"Registered!";
+	[_connectButton setTitle:@"Handshake" forState:UIControlStateNormal];
 	_clientStatus = kRGIControlClientStatus_Registered;
 }
 
+static NSTimer *_timer = nil;
+
 - (void) remoteGameInterface:(RGIRemoteGameInterface*)remoteGameInterface didReceivePacket:(RGIPacket*)packet{
+	NSLog(@"Did receive packet: %@",packet);
+	
+	NSString *payloadString = [[[NSString alloc] initWithData:packet.payload encoding:NSUTF8StringEncoding] autorelease];
+	
+	if(_clientStatus == kRGIControlClientStatus_Handshaking){
+		if([@"OLEH" isEqualToString:payloadString]){
+			_clientStatus = kRGIControlClientStatus_Handshaked;
+			_stateLabel.text = @"Handshaked!";
+			[_connectButton setTitle:@"Activate" forState:UIControlStateNormal];
+		}
+	}
+	else if(_clientStatus == kRGIControlClientStatus_Activating){
+		if ([@"SCORE:0" isEqualToString:payloadString]) {
+			_clientStatus = kRGIControlClientStatus_Activated;
+			_stateLabel.text = @"Activated - Score: 0";
+			
+#ifdef TARGET_IPHONE_SIMULATOR
+			_timer =[NSTimer scheduledTimerWithTimeInterval:1.0/3.0 target:self selector:@selector(generate:) userInfo:nil repeats:YES];
+#else
+			[[UIAccelerometer sharedAccelerometer] setUpdateInterval:1.0/3.0];
+			[[UIAccelerometer sharedAccelerometer] setDelegate:self];
+#endif
+			
+		}
+	}
+	else if(_clientStatus == kRGIControlClientStatus_Activated){
+		if([payloadString hasPrefix:@"FINISH:"]){
+			_clientStatus = kRGIControlClientStatus_Deactivated;
+			_stateLabel.text = [NSString stringWithFormat:@"Deactivated - Final Score: %@",[payloadString stringByReplacingOccurrencesOfString:@"FINISH:" withString:@""]];
+			[_connectButton setTitle:@"Replay" forState:UIControlStateNormal];
+		} else if([payloadString hasPrefix:@"SCORE:"]){
+			_stateLabel.text = [NSString stringWithFormat:@"Activated - Score: %@",[payloadString stringByReplacingOccurrencesOfString:@"SCORE:" withString:@""]];
+		}
+	}
+	
+}
+
+#pragma mark - UIAccelerometerDelegate
+
+- (void) generate:(id)sender{
+	if(_clientStatus == kRGIControlClientStatus_Activated){
+		NSString *payload = [NSString stringWithFormat:@"<CONTROL>AX:%@|AY:%@|C1:0|C2:0", [NSNumber numberWithFloat:(rand() * 1.0f / RAND_MAX)],[NSNumber numberWithFloat:(rand() * 1.0f / RAND_MAX)]];
+		[[RGIRemoteGameInterface sharedInterface] sendPayload:[payload dataUsingEncoding:NSUTF8StringEncoding]];
+	}
+	else {
+		[sender invalidate];
+	}
+}
+
+- (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration{
+	if(_clientStatus == kRGIControlClientStatus_Activated){
+		NSString *payload = [NSString stringWithFormat:@"<CONTROL>AX:%f|AY:%f|C1:0|C2:0",acceleration.x,acceleration.y];
+		[[RGIRemoteGameInterface sharedInterface] sendPayload:[payload dataUsingEncoding:NSUTF8StringEncoding]];
+	}
 }
 
 #pragma mark - RGI Glue
@@ -40,18 +99,37 @@
 		{
 			NSLog(@"Connecting...");
 			_clientStatus = kRGIControlClientStatus_Connecting;
+		_stateLabel.text = @"Connecting...";
 			[[RGIRemoteGameInterface sharedInterface] connectToServer];
 			break;
 		}
 		case kRGIControlClientStatus_Connected:{
 			NSLog(@"Registering with hash '%@'...",_textView.text);
+			[[NSUserDefaults standardUserDefaults] setValue:_textView.text forKey:@"LastHash"];
 			_clientStatus = kRGIControlClientStatus_Registering;
+			_stateLabel.text = [NSString stringWithFormat:@"Registering with hash '%@'...",_textView.text] ;
 			[[RGIRemoteGameInterface sharedInterface] registerWithHash:_textView.text];
 			
 		}
 		case kRGIControlClientStatus_Registered:{
-			NSLog(@"Sengin payload...");
+			NSLog(@"Sending handshake payload...");
+			_clientStatus = kRGIControlClientStatus_Handshaking;
+			_stateLabel.text = @"Handshaking...";
 			[[RGIRemoteGameInterface sharedInterface] sendPayload:[@"HELO" dataUsingEncoding:NSUTF8StringEncoding]];
+			break;
+		}
+		case kRGIControlClientStatus_Handshaked:{
+			NSLog(@"Sending activate payload...");
+			_stateLabel.text = @"Activating...";
+			[[RGIRemoteGameInterface sharedInterface] sendPayload:[@"START" dataUsingEncoding:NSUTF8StringEncoding]];
+			_clientStatus = kRGIControlClientStatus_Activating;
+			break;
+		}
+		case kRGIControlClientStatus_Deactivated:{
+			NSLog(@"Sending replay payload...");
+			_stateLabel.text = @"Replaying...";
+			[[RGIRemoteGameInterface sharedInterface] sendPayload:[@"REPLAY:1|NAME:tjanela" dataUsingEncoding:NSUTF8StringEncoding]];
+			_clientStatus = kRGIControlClientStatus_Activating;
 			break;
 		}
 		default:
@@ -97,6 +175,7 @@
 	[self.view addSubview:_connectButton];
 	
 	_textView = [[[UITextView alloc] initWithFrame:CGRectMake(0, 40, screenSize.width, 40)] autorelease];
+	_textView.text =[[NSUserDefaults standardUserDefaults] valueForKey:@"LastHash"];
 	[self.view addSubview:_textView];
 	
 	_stateLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, 80, screenSize.width, 40)]autorelease];

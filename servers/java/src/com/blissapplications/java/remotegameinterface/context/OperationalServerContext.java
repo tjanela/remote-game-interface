@@ -70,13 +70,13 @@ public class OperationalServerContext {
 			if(isDisplayClient(client)){
 				OperationalServerHash hash = _displayClientHashes.get(client);
 				IClientConnection controlClient = getControlClient(hash);
-				response = OperationalProtocolPacket.getPayloadResponse();
+				//response = OperationalProtocolPacket.getPayloadResponse();
 				controlClient.writeData(OperationalProtocolPacket.encode(request));
 			}
 			else if(isControlClient(client)){
 				OperationalServerHash hash = _controlClientHashes.get(client);
 				IClientConnection displayClient = getDisplayClient(hash);
-				response = OperationalProtocolPacket.getPayloadResponse();
+				//response = OperationalProtocolPacket.getPayloadResponse();
 				displayClient.writeData(OperationalProtocolPacket.encode(request));
 			}
 			else{
@@ -96,7 +96,7 @@ public class OperationalServerContext {
 			break;
 		}
 
-		return OperationalProtocolPacket.encode(response);
+		return response != null ? OperationalProtocolPacket.encode(response) : null;
 	}
 
 	public void handleClientDisconnection(IClientConnection client) throws Exception{

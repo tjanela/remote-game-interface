@@ -107,25 +107,25 @@
 
 + (RGIPacket*) packetRequestRegisterControlClient:(NSString *)hash{
 	RGIPacket *packet = [[RGIPacket alloc] initWithId:kRGIPacket_RegisterControlClientRequest payloadString:hash];
-	NSLog(@"Created pacekt: %@",packet);
+	NSLog(@"Created packet: %@",packet);
 	return [packet autorelease];
 }
 
 + (RGIPacket*) packetRequestUnregisterControlClient:(NSString *)hash{
 	RGIPacket *packet = [[RGIPacket alloc] initWithId:kRGIPacket_UnregisterControlClientRequest payloadString:hash];
-	NSLog(@"Created pacekt: %@",packet);
+	NSLog(@"Created packet: %@",packet);
 	return [packet autorelease];
 }
 
 + (RGIPacket*) packetRequestPayload:(NSData *)data{
 	RGIPacket *packet = [[RGIPacket alloc] initWithId:kRGIPacket_PayloadRequest payloadData:data];
-	NSLog(@"Created pacekt: %@",packet);
+	NSLog(@"Created packet: %@",packet);
 	return [packet autorelease];
 }
 
 + (RGIPacket*) packetResponsePayload:(NSData *)data{
 	RGIPacket *packet = [[RGIPacket alloc] initWithId:kRGIPacket_PayloadResponse payloadData:data];
-	NSLog(@"Created pacekt: %@",packet);
+	NSLog(@"Created packet: %@",packet);
 	return [packet autorelease];
 }
 

@@ -28,7 +28,7 @@
 #import <unistd.h>
 
 
-#if 0
+#if 1
 
 // Logging Enabled - See log level below
 
@@ -58,7 +58,7 @@
 #define LogCTrace()             LogC(LOG_FLAG_VERBOSE, @"%@: %s", THIS_FILE, __FUNCTION__)
 
 // Log levels : off, error, warn, info, verbose
-static const int logLevel = LOG_LEVEL_VERBOSE;
+static const int logLevel = LOG_LEVEL_INFO;
 
 #else
 

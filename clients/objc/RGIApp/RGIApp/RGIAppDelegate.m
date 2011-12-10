@@ -8,6 +8,10 @@
 
 #import "RGIAppDelegate.h"
 #import "RGITestViewController.h"
+#import "DDLog.h"
+#import "DDTTYLogger.h"
+
+static const int ddLogLevel = LOG_LEVEL_INFO;
 
 @implementation RGIAppDelegate
 
@@ -16,11 +20,13 @@
 - (void)dealloc
 {
 	[_window release];
-    [super dealloc];
+	[super dealloc];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	
+	[DDLog addLogger:[DDTTYLogger sharedInstance]];
 	self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 	self.window.rootViewController = [[[RGITestViewController alloc] initWithNibName:nil bundle:nil] autorelease];
   self.window.backgroundColor = [UIColor whiteColor];
