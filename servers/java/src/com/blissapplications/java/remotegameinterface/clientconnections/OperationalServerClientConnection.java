@@ -56,7 +56,8 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 
 				if(request == null || request.capacity() == 0){
 					exit = Boolean.TRUE;
-			}
+					continue;
+				}
 			
 				
 				response = responseForRequest(request);

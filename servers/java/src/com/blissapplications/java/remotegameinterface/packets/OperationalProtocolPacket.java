@@ -5,6 +5,9 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
+import org.apache.log4j.Logger;
+
+import com.blissapplications.java.remotegameinterface.context.OperationalServerContext;
 import com.blissapplications.java.remotegameinterface.context.OperationalServerHash;
 
 /**
@@ -13,8 +16,12 @@ import com.blissapplications.java.remotegameinterface.context.OperationalServerH
  * Time: 4:27 AM
  */
 public class OperationalProtocolPacket {
-
+	private static Logger _logger = Logger.getLogger(OperationalProtocolPacket.class);
 	public static final int ID_FIELD_LENGTH = 3;
+	
+	public static final String ERROR_ALREADY_REGISTERED_PAYLOAD = "ALREADY_REGISTERED";
+	public static final String ERROR_UNKNOWN_HASH_PAYLOAD = "UNKNOWN_HASH";
+	public static final String ERROR_GENERIC_PAYLOAD = "ERROR";
 	
 	public static final byte[] MAGIC_FIELD = {'[','!','P','U','M','P','!',']'};
 	public static final int MAGIC_FIELD_LENGTH = MAGIC_FIELD.length;
@@ -80,10 +87,18 @@ public class OperationalProtocolPacket {
 		return getPacket(OperationalProtocolPacketType.RegisterDisplayClientResponse, encodedHash);
 	}
 	
+	public static OperationalProtocolPacket getRegisterDisplayClientErrorResponse(String payload) throws Exception{
+		return getPacket(OperationalProtocolPacketType.RegisterDisplayClientResponse,payload);
+	}
+	
 	public static OperationalProtocolPacket  getRegisterControlClientResponse(OperationalServerHash hash) throws Exception{
 		String encodedHash = hash.toEncodedString();
 		return getPacket(OperationalProtocolPacketType.RegisterControlClientResponse, encodedHash);
 	}
+	public static OperationalProtocolPacket getRegisterControlClientErrorResponse(String payload) throws Exception{
+		return getPacket(OperationalProtocolPacketType.RegisterControlClientResponse,payload);
+	}
+	
 	
 	public static OperationalProtocolPacket  getUnregisterControlClientResponse(OperationalServerHash hash) throws Exception{
 		String encodedHash = hash.toEncodedString();
@@ -104,6 +119,12 @@ public class OperationalProtocolPacket {
 		OperationalProtocolPacket decodedRequest = new OperationalProtocolPacket();
 
 		int payloadSize = request.capacity() - ID_FIELD_LENGTH - MAGIC_FIELD_LENGTH;
+		
+		if(payloadSize < 0){
+			_logger.error("Error decoding packet " + request.toString());
+			return null;
+		}
+		
 		decodedRequest._payload = new byte[payloadSize];
 		
 		request.get(decodedRequest._id, 0, ID_FIELD_LENGTH);

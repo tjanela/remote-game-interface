@@ -60,18 +60,28 @@ public class OperationalServerSocketWorker extends ServerSocketWorker {
 	}
 
 	public void clientServed(IClientConnection servedClient) {
-		_logger.info(String.format("Client %1$ has been served by operational server.", servedClient));
+		_logger.info(String.format("Client %1$s has been served by operational server.", servedClient));
+		
 		synchronized (this) {
 			if (_operationalServerClientConnections.contains(servedClient)) {
 				_operationalServerClientConnections.remove(servedClient);
 			} else {
-				_logger.warn(String.format("Client %1$ not found on operational server internal state! Proceeding...", servedClient));
+				_logger.warn(String.format("Client %1$s not found on operational server internal state! Proceeding...", servedClient));
+			}
+			
+			try
+			{
+				OperationalServerContext.getOperationalServerContextInstance().handleClientDisconnection(servedClient);
+			}
+			catch(Exception ex)
+			{
+				_logger.error(String.format("Client %1$s", servedClient), ex);
 			}
 		}
 	}
 	
 	public void clientDisconnected(IClientConnection disconnectedClient) {
-		_logger.info(String.format("Client %1$ has disconnected.", disconnectedClient));
+		_logger.info(String.format("Client %1$s has disconnected.", disconnectedClient));
 		synchronized (this) {
 			if (_operationalServerClientConnections.contains(disconnectedClient)) {
 				_operationalServerClientConnections.remove(disconnectedClient);

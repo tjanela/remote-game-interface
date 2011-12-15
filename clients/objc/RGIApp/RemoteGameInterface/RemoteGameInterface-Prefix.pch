@@ -1,7 +1,0 @@
-//
-// Prefix header for all source files of the 'RemoteGameInterface' target in the 'RemoteGameInterface' project
-//
-
-#ifdef __OBJC__
-	#import <Foundation/Foundation.h>
-#endif

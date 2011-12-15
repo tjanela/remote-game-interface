@@ -47,7 +47,7 @@ public class Server {
 		printHelp();
 		while (!_exit){
 			try {
-				int key = System.in.read();
+				/*int key = System.in.read();
 
 				if(key == -1){
 					_exit = Boolean.TRUE;
@@ -61,9 +61,9 @@ public class Server {
 					case 'q':
 						_exit = Boolean.TRUE;
 						break;
-				}
+				}*/
 				
-			} catch (IOException e) {
+			} catch (Exception e) {
 				_logger.error("Error on loop...",e);
 			}
 		}

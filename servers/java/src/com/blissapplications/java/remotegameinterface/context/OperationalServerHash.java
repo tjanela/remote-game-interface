@@ -16,8 +16,9 @@ import org.apache.log4j.Logger;
  * Time: 4:05 AM
  */
 public class OperationalServerHash {
-	public static final int HASH_SIZE = 6;
-	private static String _alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
+	public static final int HASH_SIZE = 7;
+	//private static String _alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
+	private static String _alphabet = "0123456789";
 	private static Logger _logger = Logger.getLogger(OperationalServerHash.class);
 	private char[] hash;
 	private static Random _random;
