@@ -108,11 +108,17 @@ public class OperationalServerContext {
 		case PayloadRequest:
 		{
 			if(isDisplayClient(client)){
+				
 				OperationalServerHash hash = _displayClientHashes.get(client);
 				IClientConnection controlClient = getControlClient(hash);
 				//response = OperationalProtocolPacket.getPayloadResponse();
+				
+				
 				if(controlClient != null){
+					_logger.debug(String.format("Payload Request from DisplayClient[%1$s]: %2$s", hash,request.toString()));
 					controlClient.writeData(OperationalProtocolPacket.encode(request));
+				}else {
+					_logger.debug(String.format("Payload Request from DisplayClient[%1$s] %2$s has no ControlClient", hash, request.toString()));
 				}
 			}
 			else if(isControlClient(client)){
@@ -120,7 +126,10 @@ public class OperationalServerContext {
 				IClientConnection displayClient = getDisplayClient(hash);
 				//response = OperationalProtocolPacket.getPayloadResponse();
 				if(displayClient != null){
+					_logger.debug(String.format("Payload Request from ControlClient[%1$s]: %2$s", hash, request.toString()));
 					displayClient.writeData(OperationalProtocolPacket.encode(request));
+				}else {
+					_logger.debug(String.format("Payload Request from ControlClient[%1$s] %2$s has no DisplayClient", hash, request.toString()));
 				}
 			}
 			else{

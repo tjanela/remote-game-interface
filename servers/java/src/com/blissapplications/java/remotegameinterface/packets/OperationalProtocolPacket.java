@@ -158,4 +158,22 @@ public class OperationalProtocolPacket {
 		
 		return byteBuffer;
 	}
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		byte byte1 = getId()[0];
+		byte byte2 = getId()[1];
+		byte byte3 = getId()[2];
+		
+		String payload = new String(getPayload());
+		String magic = new String(getMagic());
+		
+		sb.append("[").append("0x").append(String.format("%1$02X", byte1)).append(String.format("%1$02X", byte2)).append(String.format("%1$02X", byte3)).append("]");
+		
+		sb.append("[").append(payload).append("]");
+		
+		sb.append("[").append(magic).append("]");
+		
+		return sb.toString();
+	}
 }
