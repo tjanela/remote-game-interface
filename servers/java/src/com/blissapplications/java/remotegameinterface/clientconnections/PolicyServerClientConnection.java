@@ -58,7 +58,9 @@ public class PolicyServerClientConnection implements Runnable, IClientConnection
 		if (_policyRequestContents.equals(request)) {
 			writeData(Charset.forName("UTF-8").newEncoder().encode(CharBuffer.wrap(_policyResponseContents)));
 		}
-
+		
+		_clientSocketOutputStream.write(0);
+		_clientSocketOutputStream.flush();
 		_clientSocket.close();
 
 		_delegate.clientServed(this);

@@ -1,0 +1,1 @@
+﻿package com.blissapplications.as3 {		public interface IRemoteGameInterfacePolicyLoaderDelegate {		function policyError(policyLoader:RemoteGameInterfacePolicyLoader,e:Error):void;		function policyLoaded():void;	}	}
