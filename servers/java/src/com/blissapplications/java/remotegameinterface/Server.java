@@ -1,9 +1,8 @@
 package com.blissapplications.java.remotegameinterface;
 
+import java.util.GregorianCalendar;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-
-import java.io.IOException;
 
 /**
  * User: tjanela
@@ -45,6 +44,7 @@ public class Server {
 			_exit = Boolean.TRUE;
 		}
 		printHelp();
+		GregorianCalendar lastGCTime = new GregorianCalendar();
 		while (!_exit){
 			try {
 				/*int key = System.in.read();
@@ -62,7 +62,13 @@ public class Server {
 						_exit = Boolean.TRUE;
 						break;
 				}*/
-				
+				GregorianCalendar nowDate = new GregorianCalendar();
+				nowDate.add(GregorianCalendar.MINUTE, -5);
+				if(lastGCTime.before(nowDate)){
+					_logger.info("Collecting garbage...");
+					System.gc();
+					lastGCTime = new GregorianCalendar();
+				}
 			} catch (Exception e) {
 				_logger.error("Error on loop...",e);
 			}

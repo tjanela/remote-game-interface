@@ -92,32 +92,6 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 		_clientSocketOutputStream.write(data.array());
 	}
 
-	public static void dumpHex( StringBuffer sb, byte[] b )
-	{
-		for( int i = 0 ; i < b.length ; ++i )
-		{
-			if( i % 16 == 0 )
-			{
-				sb.append( Integer.toHexString( ( i & 0xFFFF ) | 0x10000 ).substring( 1, 5 ) + " - " ) ;
-			}
-			sb.append( Integer.toHexString( ( b[ i ] & 0xFF ) | 0x100 ).substring( 1, 3 ) + " " ) ;
-			if( i % 16 == 15 || i == b.length - 1 )
-			{
-				int j ;
-				for( j = 16 - i % 16 ; j > 1 ; --j )
-					sb.append( "   " ) ;
-				sb.append( " - " ) ;
-				int start = ( i / 16 ) * 16 ;
-				int end = ( b.length < i + 1 ) ? b.length : ( i + 1 ) ;
-				for( j = start ; j < end ; ++j )
-					if( b[ j ] >= 32 && b[ j ] <= 126 )
-						sb.append( ( char )b[ j ] ) ;
-					else
-						sb.append( "." ) ;
-			}
-		}
-	}
-
 	protected ByteBuffer readFromInputStream(InputStream inputStream, Integer maxBytes) throws Exception{
 		ByteBuffer buffer = ByteBuffer.allocate(maxBytes);
 		buffer.mark();
@@ -129,7 +103,6 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 		do {
 			codePoint = inputStream.read();
 			byte readByte = (byte)(codePoint & 0xff);
-			_logger.debug(String.format("Read byte: %1$02X", readByte));
 			buffer.put(readByte);
 			if(buffer.position() >= OperationalProtocolPacket.PACKET_MIN_SIZE){
 				buffer.position(buffer.position() - OperationalProtocolPacket.MAGIC_FIELD_LENGTH);
@@ -142,19 +115,11 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 		}	while (!magicFound && buffer.position() < maxBytes);
 
 		buffer.reset();
-		StringBuffer sb =new StringBuffer();
-		dumpHex(sb, buffer.array());
 		
-		_logger.debug(String.format("ByteBuffer: %1$s",sb.toString()));
 		ByteBuffer trimmedByteBuffer = ByteBuffer.allocate(packetSize);
 		trimmedByteBuffer.mark();
 		trimmedByteBuffer.put(buffer.array(),0,packetSize);
 		trimmedByteBuffer.reset();
-
-		sb =new StringBuffer();
-		dumpHex(sb, trimmedByteBuffer.array());
-		
-		_logger.debug(String.format("Trimmed byteBuffer: %1$s",sb.toString()));
 
 		return trimmedByteBuffer;
 	}

@@ -7,7 +7,6 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
-import com.blissapplications.java.remotegameinterface.context.OperationalServerContext;
 import com.blissapplications.java.remotegameinterface.context.OperationalServerHash;
 
 /**
