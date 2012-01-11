@@ -72,6 +72,7 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 			}catch(SocketException ex){
 				_logger.error("Error serving client: ", ex);
 				_delegate.clientDisconnected(this);
+				exit = Boolean.TRUE;
 				throw ex;
 			}
 
@@ -112,7 +113,7 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 					packetSize = buffer.position();
 				}
 			}
-		}	while (!magicFound && buffer.position() < maxBytes);
+		}	while (!magicFound && buffer.position() < maxBytes && codePoint != -1);
 
 		buffer.reset();
 		

@@ -69,6 +69,7 @@ public class Server {
 					System.gc();
 					lastGCTime = new GregorianCalendar();
 				}
+				Thread.sleep(1000);
 			} catch (Exception e) {
 				_logger.error("Error on loop...",e);
 			}

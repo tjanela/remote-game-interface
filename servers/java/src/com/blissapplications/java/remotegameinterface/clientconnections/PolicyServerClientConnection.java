@@ -78,7 +78,7 @@ public class PolicyServerClientConnection implements Runnable, IClientConnection
 			do {
 				codePoint = inputStream.read();
 
-				if (codePoint == 0) {
+				if (codePoint == 0 || codePoint == -1) {
 					zeroByteRead = true;
 				} else if (Character.isValidCodePoint(codePoint)) {
 					buffer.appendCodePoint(codePoint);
