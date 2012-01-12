@@ -75,7 +75,7 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 				exit = Boolean.TRUE;
 				throw ex;
 			}
-
+			Thread.yield();
 		}
 
 		_delegate.clientServed(this);

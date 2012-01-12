@@ -1,10 +1,13 @@
 package com.blissapplications.java.remotegameinterface;
 
+import com.blissapplications.java.PropertiesUtils;
 import com.blissapplications.java.remotegameinterface.socketworkers.OperationalServerSocketWorker;
 import com.blissapplications.java.remotegameinterface.socketworkers.PolicyServerSocketWorker;
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.net.*;
+import java.util.Properties;
 
 /**
  * User: tjanela
@@ -13,8 +16,9 @@ import java.net.*;
  */
 
 public class RemoteGameInterfaceServer implements IRemoteGameInterfaceServer {
-	public static final Integer SERVER_OPERATIONAL_PORT = 20201;
-	public static final Integer SERVER_POLICY_PORT = SERVER_OPERATIONAL_PORT + 1;
+	public static Properties LOADED_PROPERTIES;
+	public static Integer SERVER_OPERATIONAL_PORT; 
+	public static Integer SERVER_POLICY_PORT;
 
 	public static final Logger _logger = Logger.getLogger(RemoteGameInterfaceServer.class);
 
@@ -28,6 +32,18 @@ public class RemoteGameInterfaceServer implements IRemoteGameInterfaceServer {
 	private PolicyServerSocketWorker _policyServerSocketWorker;
 	private ServerSocket _policyServerSocket;
 
+	static{
+		
+		try {
+			LOADED_PROPERTIES = PropertiesUtils.load("properties/config.properties");
+			SERVER_OPERATIONAL_PORT = Integer.parseInt(LOADED_PROPERTIES.getProperty("remotegameinterface.operationalport","20201"));
+			SERVER_POLICY_PORT = Integer.parseInt(LOADED_PROPERTIES.getProperty("remotegameinterface.policyport","20202"));
+		} catch (IOException e) {
+			_logger.error("Error loading config.properties", e);
+		}
+		
+	}
+	
 	public void start() throws Exception {
 
 		_policyServerSocket = new ServerSocket(SERVER_POLICY_PORT);

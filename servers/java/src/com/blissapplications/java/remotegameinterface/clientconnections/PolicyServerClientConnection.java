@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
@@ -41,6 +42,9 @@ public class PolicyServerClientConnection implements Runnable, IClientConnection
 			_logger.info(String.format("Serving client %1$s...",_clientSocket.getInetAddress().getHostAddress()));
 			serveClient();
 			_logger.info(String.format("Client %1$s served.",_clientSocket.getInetAddress().getHostAddress()));
+		}
+		catch (SocketTimeoutException ex){
+			_logger.warn("Policy client socket read timed out. Closing connection.");
 		}
 		catch (Exception ex){
 			_logger.error(String.format("Error serving client %1$s",_clientSocket.getInetAddress().getHostAddress()),ex);

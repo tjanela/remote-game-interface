@@ -37,6 +37,8 @@ public class PolicyServerSocketWorker extends ServerSocketWorker {
 			try {
 				Socket policyClient = _socket.accept();
 
+				policyClient.setSoTimeout(5000);
+				
 				PolicyServerClientConnection clientConnection = new PolicyServerClientConnection(
 						policyClient, this);
 				Thread clientThread = new Thread(clientConnection);
