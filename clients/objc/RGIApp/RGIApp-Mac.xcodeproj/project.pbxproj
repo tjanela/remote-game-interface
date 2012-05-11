@@ -1,0 +1,565 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E216BE7F155BDBC900FEB0EF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E216BE7E155BDBC900FEB0EF /* Cocoa.framework */; };
+		E216BE9E155BDBEC00FEB0EF /* DDAbstractDatabaseLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E216BE8E155BDBEC00FEB0EF /* DDAbstractDatabaseLogger.h */; };
+		E216BE9F155BDBEC00FEB0EF /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E216BE8F155BDBEC00FEB0EF /* DDAbstractDatabaseLogger.m */; };
+		E216BEA0155BDBEC00FEB0EF /* DDASLLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E216BE90155BDBEC00FEB0EF /* DDASLLogger.h */; };
+		E216BEA1155BDBEC00FEB0EF /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E216BE91155BDBEC00FEB0EF /* DDASLLogger.m */; };
+		E216BEA2155BDBEC00FEB0EF /* DDFileLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E216BE92155BDBEC00FEB0EF /* DDFileLogger.h */; };
+		E216BEA3155BDBEC00FEB0EF /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E216BE93155BDBEC00FEB0EF /* DDFileLogger.m */; };
+		E216BEA4155BDBEC00FEB0EF /* DDLog.h in Headers */ = {isa = PBXBuildFile; fileRef = E216BE94155BDBEC00FEB0EF /* DDLog.h */; };
+		E216BEA5155BDBEC00FEB0EF /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = E216BE95155BDBEC00FEB0EF /* DDLog.m */; };
+		E216BEA6155BDBEC00FEB0EF /* DDTTYLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = E216BE96155BDBEC00FEB0EF /* DDTTYLogger.h */; };
+		E216BEA7155BDBEC00FEB0EF /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E216BE97155BDBEC00FEB0EF /* DDTTYLogger.m */; };
+		E216BEA8155BDBEC00FEB0EF /* ContextFilterLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = E216BE99155BDBEC00FEB0EF /* ContextFilterLogFormatter.h */; };
+		E216BEA9155BDBEC00FEB0EF /* ContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = E216BE9A155BDBEC00FEB0EF /* ContextFilterLogFormatter.m */; };
+		E216BEAA155BDBEC00FEB0EF /* DispatchQueueLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = E216BE9B155BDBEC00FEB0EF /* DispatchQueueLogFormatter.h */; };
+		E216BEAB155BDBEC00FEB0EF /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = E216BE9C155BDBEC00FEB0EF /* DispatchQueueLogFormatter.m */; };
+		E216BEB1155BDC2100FEB0EF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E216BE7E155BDBC900FEB0EF /* Cocoa.framework */; };
+		E216BEB7155BDC2100FEB0EF /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = E216BEB6155BDC2100FEB0EF /* GCDAsyncSocket.m */; };
+		E216BEC0155BDCCF00FEB0EF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E216BE7E155BDBC900FEB0EF /* Cocoa.framework */; };
+		E216BECE155BDCE200FEB0EF /* RGIPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = E216BECA155BDCE200FEB0EF /* RGIPacket.h */; };
+		E216BECF155BDCE200FEB0EF /* RGIPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = E216BECB155BDCE200FEB0EF /* RGIPacket.m */; };
+		E216BED0155BDCE200FEB0EF /* RGIRemoteGameInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = E216BECC155BDCE200FEB0EF /* RGIRemoteGameInterface.h */; };
+		E216BED1155BDCE200FEB0EF /* RGIRemoteGameInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = E216BECD155BDCE200FEB0EF /* RGIRemoteGameInterface.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E216BED2155BDCEC00FEB0EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E2A4F316155BDB780008C136 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E216BEAF155BDC2100FEB0EF;
+			remoteInfo = GCDAsyncSocket;
+		};
+		E216BED4155BDCF100FEB0EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E2A4F316155BDB780008C136 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E216BE7A155BDBC900FEB0EF;
+			remoteInfo = Lumberjack;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		E216BE7B155BDBC900FEB0EF /* libLumberjack.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLumberjack.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E216BE7E155BDBC900FEB0EF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		E216BE81155BDBC900FEB0EF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		E216BE82155BDBC900FEB0EF /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		E216BE83155BDBC900FEB0EF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		E216BE8E155BDBEC00FEB0EF /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
+		E216BE8F155BDBEC00FEB0EF /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
+		E216BE90155BDBEC00FEB0EF /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
+		E216BE91155BDBEC00FEB0EF /* DDASLLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDASLLogger.m; sourceTree = "<group>"; };
+		E216BE92155BDBEC00FEB0EF /* DDFileLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDFileLogger.h; sourceTree = "<group>"; };
+		E216BE93155BDBEC00FEB0EF /* DDFileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFileLogger.m; sourceTree = "<group>"; };
+		E216BE94155BDBEC00FEB0EF /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLog.h; sourceTree = "<group>"; };
+		E216BE95155BDBEC00FEB0EF /* DDLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDLog.m; sourceTree = "<group>"; };
+		E216BE96155BDBEC00FEB0EF /* DDTTYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTTYLogger.h; sourceTree = "<group>"; };
+		E216BE97155BDBEC00FEB0EF /* DDTTYLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTTYLogger.m; sourceTree = "<group>"; };
+		E216BE99155BDBEC00FEB0EF /* ContextFilterLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextFilterLogFormatter.h; sourceTree = "<group>"; };
+		E216BE9A155BDBEC00FEB0EF /* ContextFilterLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContextFilterLogFormatter.m; sourceTree = "<group>"; };
+		E216BE9B155BDBEC00FEB0EF /* DispatchQueueLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DispatchQueueLogFormatter.h; sourceTree = "<group>"; };
+		E216BE9C155BDBEC00FEB0EF /* DispatchQueueLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DispatchQueueLogFormatter.m; sourceTree = "<group>"; };
+		E216BE9D155BDBEC00FEB0EF /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		E216BEB0155BDC2100FEB0EF /* libGCDAsyncSocket.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGCDAsyncSocket.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E216BEB5155BDC2100FEB0EF /* GCDAsyncSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
+		E216BEB6155BDC2100FEB0EF /* GCDAsyncSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
+		E216BEBF155BDCCF00FEB0EF /* libRemoteGameInterface.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRemoteGameInterface.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E216BECA155BDCE200FEB0EF /* RGIPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RGIPacket.h; sourceTree = "<group>"; };
+		E216BECB155BDCE200FEB0EF /* RGIPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RGIPacket.m; sourceTree = "<group>"; };
+		E216BECC155BDCE200FEB0EF /* RGIRemoteGameInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RGIRemoteGameInterface.h; sourceTree = "<group>"; };
+		E216BECD155BDCE200FEB0EF /* RGIRemoteGameInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RGIRemoteGameInterface.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E216BE78155BDBC900FEB0EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E216BE7F155BDBC900FEB0EF /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E216BEAD155BDC2100FEB0EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E216BEB1155BDC2100FEB0EF /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E216BEBC155BDCCF00FEB0EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E216BEC0155BDCCF00FEB0EF /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E216BE7C155BDBC900FEB0EF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E216BE7B155BDBC900FEB0EF /* libLumberjack.a */,
+				E216BEB0155BDC2100FEB0EF /* libGCDAsyncSocket.a */,
+				E216BEBF155BDCCF00FEB0EF /* libRemoteGameInterface.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E216BE7D155BDBC900FEB0EF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E216BE7E155BDBC900FEB0EF /* Cocoa.framework */,
+				E216BE80155BDBC900FEB0EF /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E216BE80155BDBC900FEB0EF /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E216BE81155BDBC900FEB0EF /* AppKit.framework */,
+				E216BE82155BDBC900FEB0EF /* CoreData.framework */,
+				E216BE83155BDBC900FEB0EF /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		E216BE84155BDBC900FEB0EF /* Lumberjack */ = {
+			isa = PBXGroup;
+			children = (
+				E216BE8E155BDBEC00FEB0EF /* DDAbstractDatabaseLogger.h */,
+				E216BE8F155BDBEC00FEB0EF /* DDAbstractDatabaseLogger.m */,
+				E216BE90155BDBEC00FEB0EF /* DDASLLogger.h */,
+				E216BE91155BDBEC00FEB0EF /* DDASLLogger.m */,
+				E216BE92155BDBEC00FEB0EF /* DDFileLogger.h */,
+				E216BE93155BDBEC00FEB0EF /* DDFileLogger.m */,
+				E216BE94155BDBEC00FEB0EF /* DDLog.h */,
+				E216BE95155BDBEC00FEB0EF /* DDLog.m */,
+				E216BE96155BDBEC00FEB0EF /* DDTTYLogger.h */,
+				E216BE97155BDBEC00FEB0EF /* DDTTYLogger.m */,
+				E216BE98155BDBEC00FEB0EF /* Extensions */,
+			);
+			path = Lumberjack;
+			sourceTree = "<group>";
+		};
+		E216BE98155BDBEC00FEB0EF /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E216BE99155BDBEC00FEB0EF /* ContextFilterLogFormatter.h */,
+				E216BE9A155BDBEC00FEB0EF /* ContextFilterLogFormatter.m */,
+				E216BE9B155BDBEC00FEB0EF /* DispatchQueueLogFormatter.h */,
+				E216BE9C155BDBEC00FEB0EF /* DispatchQueueLogFormatter.m */,
+				E216BE9D155BDBEC00FEB0EF /* README.txt */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E216BEB2155BDC2100FEB0EF /* GCDAsyncSocket */ = {
+			isa = PBXGroup;
+			children = (
+				E216BEB5155BDC2100FEB0EF /* GCDAsyncSocket.h */,
+				E216BEB6155BDC2100FEB0EF /* GCDAsyncSocket.m */,
+			);
+			path = GCDAsyncSocket;
+			sourceTree = "<group>";
+		};
+		E216BEC1155BDCCF00FEB0EF /* RemoteGameInterface */ = {
+			isa = PBXGroup;
+			children = (
+				E216BECA155BDCE200FEB0EF /* RGIPacket.h */,
+				E216BECB155BDCE200FEB0EF /* RGIPacket.m */,
+				E216BECC155BDCE200FEB0EF /* RGIRemoteGameInterface.h */,
+				E216BECD155BDCE200FEB0EF /* RGIRemoteGameInterface.m */,
+			);
+			path = RemoteGameInterface;
+			sourceTree = "<group>";
+		};
+		E2A4F314155BDB780008C136 = {
+			isa = PBXGroup;
+			children = (
+				E216BE84155BDBC900FEB0EF /* Lumberjack */,
+				E216BEB2155BDC2100FEB0EF /* GCDAsyncSocket */,
+				E216BEC1155BDCCF00FEB0EF /* RemoteGameInterface */,
+				E216BE7D155BDBC900FEB0EF /* Frameworks */,
+				E216BE7C155BDBC900FEB0EF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		E216BE79155BDBC900FEB0EF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E216BE9E155BDBEC00FEB0EF /* DDAbstractDatabaseLogger.h in Headers */,
+				E216BEA0155BDBEC00FEB0EF /* DDASLLogger.h in Headers */,
+				E216BEA2155BDBEC00FEB0EF /* DDFileLogger.h in Headers */,
+				E216BEA4155BDBEC00FEB0EF /* DDLog.h in Headers */,
+				E216BEA6155BDBEC00FEB0EF /* DDTTYLogger.h in Headers */,
+				E216BEA8155BDBEC00FEB0EF /* ContextFilterLogFormatter.h in Headers */,
+				E216BEAA155BDBEC00FEB0EF /* DispatchQueueLogFormatter.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E216BEAE155BDC2100FEB0EF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E216BEBD155BDCCF00FEB0EF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E216BECE155BDCE200FEB0EF /* RGIPacket.h in Headers */,
+				E216BED0155BDCE200FEB0EF /* RGIRemoteGameInterface.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		E216BE7A155BDBC900FEB0EF /* Lumberjack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E216BE8C155BDBC900FEB0EF /* Build configuration list for PBXNativeTarget "Lumberjack" */;
+			buildPhases = (
+				E216BE77155BDBC900FEB0EF /* Sources */,
+				E216BE78155BDBC900FEB0EF /* Frameworks */,
+				E216BE79155BDBC900FEB0EF /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Lumberjack;
+			productName = Lumberjack;
+			productReference = E216BE7B155BDBC900FEB0EF /* libLumberjack.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		E216BEAF155BDC2100FEB0EF /* GCDAsyncSocket */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E216BEB8155BDC2100FEB0EF /* Build configuration list for PBXNativeTarget "GCDAsyncSocket" */;
+			buildPhases = (
+				E216BEAC155BDC2100FEB0EF /* Sources */,
+				E216BEAD155BDC2100FEB0EF /* Frameworks */,
+				E216BEAE155BDC2100FEB0EF /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E216BED5155BDCF100FEB0EF /* PBXTargetDependency */,
+			);
+			name = GCDAsyncSocket;
+			productName = GCDAsyncSocket;
+			productReference = E216BEB0155BDC2100FEB0EF /* libGCDAsyncSocket.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		E216BEBE155BDCCF00FEB0EF /* RemoteGameInterface */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E216BEC7155BDCCF00FEB0EF /* Build configuration list for PBXNativeTarget "RemoteGameInterface" */;
+			buildPhases = (
+				E216BEBB155BDCCF00FEB0EF /* Sources */,
+				E216BEBC155BDCCF00FEB0EF /* Frameworks */,
+				E216BEBD155BDCCF00FEB0EF /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E216BED3155BDCEC00FEB0EF /* PBXTargetDependency */,
+			);
+			name = RemoteGameInterface;
+			productName = RemoteGameInterface;
+			productReference = E216BEBF155BDCCF00FEB0EF /* libRemoteGameInterface.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E2A4F316155BDB780008C136 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = "Bliss Applications";
+			};
+			buildConfigurationList = E2A4F319155BDB780008C136 /* Build configuration list for PBXProject "RGIApp-Mac" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E2A4F314155BDB780008C136;
+			productRefGroup = E216BE7C155BDBC900FEB0EF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E216BE7A155BDBC900FEB0EF /* Lumberjack */,
+				E216BEAF155BDC2100FEB0EF /* GCDAsyncSocket */,
+				E216BEBE155BDCCF00FEB0EF /* RemoteGameInterface */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E216BE77155BDBC900FEB0EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E216BE9F155BDBEC00FEB0EF /* DDAbstractDatabaseLogger.m in Sources */,
+				E216BEA1155BDBEC00FEB0EF /* DDASLLogger.m in Sources */,
+				E216BEA3155BDBEC00FEB0EF /* DDFileLogger.m in Sources */,
+				E216BEA5155BDBEC00FEB0EF /* DDLog.m in Sources */,
+				E216BEA7155BDBEC00FEB0EF /* DDTTYLogger.m in Sources */,
+				E216BEA9155BDBEC00FEB0EF /* ContextFilterLogFormatter.m in Sources */,
+				E216BEAB155BDBEC00FEB0EF /* DispatchQueueLogFormatter.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E216BEAC155BDC2100FEB0EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E216BEB7155BDC2100FEB0EF /* GCDAsyncSocket.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E216BEBB155BDCCF00FEB0EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E216BECF155BDCE200FEB0EF /* RGIPacket.m in Sources */,
+				E216BED1155BDCE200FEB0EF /* RGIRemoteGameInterface.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E216BED3155BDCEC00FEB0EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E216BEAF155BDC2100FEB0EF /* GCDAsyncSocket */;
+			targetProxy = E216BED2155BDCEC00FEB0EF /* PBXContainerItemProxy */;
+		};
+		E216BED5155BDCF100FEB0EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E216BE7A155BDBC900FEB0EF /* Lumberjack */;
+			targetProxy = E216BED4155BDCF100FEB0EF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		E216BE8A155BDBC900FEB0EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		E216BE8B155BDBC900FEB0EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		E216BEB9155BDC2100FEB0EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		E216BEBA155BDC2100FEB0EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		E216BEC8155BDCCF00FEB0EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		E216BEC9155BDCCF00FEB0EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		E2A4F31B155BDB780008C136 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		E2A4F31C155BDB780008C136 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E216BE8C155BDBC900FEB0EF /* Build configuration list for PBXNativeTarget "Lumberjack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E216BE8A155BDBC900FEB0EF /* Debug */,
+				E216BE8B155BDBC900FEB0EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		E216BEB8155BDC2100FEB0EF /* Build configuration list for PBXNativeTarget "GCDAsyncSocket" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E216BEB9155BDC2100FEB0EF /* Debug */,
+				E216BEBA155BDC2100FEB0EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		E216BEC7155BDCCF00FEB0EF /* Build configuration list for PBXNativeTarget "RemoteGameInterface" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E216BEC8155BDCCF00FEB0EF /* Debug */,
+				E216BEC9155BDCCF00FEB0EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		E2A4F319155BDB780008C136 /* Build configuration list for PBXProject "RGIApp-Mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E2A4F31B155BDB780008C136 /* Debug */,
+				E2A4F31C155BDB780008C136 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E2A4F316155BDB780008C136 /* Project object */;
+}
