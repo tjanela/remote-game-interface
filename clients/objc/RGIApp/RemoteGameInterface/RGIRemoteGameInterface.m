@@ -50,9 +50,11 @@
 }
 
 - (void)connectToServer:(NSString*)host port:(NSNumber*)port andClientType:(rgiClientType)clientType{
-	if(_clientSocket != nil){
-		[_clientSocket disconnect];
-		[_clientSocket release];
+	if(_clientSocket != nil && _clientSocket.isConnected){
+		for (id<RGIRemoteGameInterfaceDelegate> delegate in _delegates) {
+			[delegate remoteGameInterfaceDidConnectSuccessfuly:self];
+		}
+		return;
 	}
 	
 	_clientType = clientType;
