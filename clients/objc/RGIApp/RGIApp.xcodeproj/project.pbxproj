@@ -85,7 +85,7 @@
 		E23D2764149449CD0053EF37 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = Headers;
+			dstPath = ../Headers;
 			dstSubfolderSpec = 16;
 			files = (
 				E23D2765149449EE0053EF37 /* RGIRemoteGameInterface.h in Copy Files */,
@@ -97,7 +97,7 @@
 		E23D276714944A4A0053EF37 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = Headers;
+			dstPath = ../Headers;
 			dstSubfolderSpec = 16;
 			files = (
 				E23D276814944A570053EF37 /* GCDAsyncSocket.h in CopyFiles */,
@@ -359,9 +359,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E265FA41148AA449004A1114 /* Build configuration list for PBXNativeTarget "RemoteGameInterface" */;
 			buildPhases = (
-				E23D2764149449CD0053EF37 /* Copy Files */,
 				E265FA35148AA449004A1114 /* Sources */,
 				E265FA36148AA449004A1114 /* Frameworks */,
+				E23D2764149449CD0053EF37 /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -377,9 +377,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E265FA53148ACD17004A1114 /* Build configuration list for PBXNativeTarget "GCDAsyncSocket" */;
 			buildPhases = (
-				E23D276714944A4A0053EF37 /* CopyFiles */,
 				E265FA47148ACD17004A1114 /* Sources */,
 				E265FA48148ACD17004A1114 /* Frameworks */,
+				E23D276714944A4A0053EF37 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -536,6 +536,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"ARCHS[sdk=iphoneos*]" = (
+					"$(ARCHS_STANDARD_32_BIT)",
+					armv6,
+				);
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -560,6 +565,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"ARCHS[sdk=iphoneos*]" = (
+					"$(ARCHS_STANDARD_32_BIT)",
+					armv6,
+				);
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
