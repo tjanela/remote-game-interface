@@ -61,5 +61,6 @@ typedef enum
 - (void) register;
 
 - (void) sendPayload:(NSData*)payload;
+- (void) sendStringPayload:(NSString*)payload;
 
 @end

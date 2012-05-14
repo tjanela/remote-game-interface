@@ -44,6 +44,10 @@
 	[_clientSocket writeData:packetData withTimeout:RGI_SOCKET_TIMEOUT tag:RGI_SEND_PAYLOAD_TAG];
 }
 
+- (void) sendStringPayload:(NSString*)payload
+{
+	[self sendPayload:[payload dataUsingEncoding:NSUTF8StringEncoding]];
+}
 
 - (void)connectToServer:(NSString*)host port:(NSNumber*)port andClientType:(rgiClientType)clientType{
 	if(_clientSocket != nil){
@@ -55,7 +59,7 @@
 	
 	_clientSocket = [[GCDAsyncSocket alloc]initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
 	NSError *error = nil;
-	[_clientSocket connectToHost:host onPort:[port intValue] error:&error];
+	[_clientSocket connectToHost:host onPort:[port intValue] withTimeout:5 error:&error];
 	
 	if(error != nil){
 		NSLog(@"Error while connecting: %@", error);
@@ -305,6 +309,9 @@
 			[delegate remoteGameInterface:self didNotConnectWithError:err];
 		}
 	}
+	
+	[_clientSocket release];
+	_clientSocket = nil;
 }
 
 /**
