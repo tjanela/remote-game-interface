@@ -47,6 +47,7 @@ typedef enum
 	NSMutableSet *_delegates;	
 	GCDAsyncSocket *_clientSocket;
 	rgiClientType _clientType;
+	BOOL _socketConnected;
 }
 
 + (RGIRemoteGameInterface*) sharedInterface;
@@ -61,5 +62,6 @@ typedef enum
 - (void) register;
 
 - (void) sendPayload:(NSData*)payload;
+- (void) sendStringPayload:(NSString*)payload;
 
 @end
