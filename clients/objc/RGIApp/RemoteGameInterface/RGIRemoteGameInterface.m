@@ -58,7 +58,7 @@
 	}
 	
 	_clientType = clientType;
-	
+	[_clientSocket release];
 	_clientSocket = [[GCDAsyncSocket alloc]initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
 	NSError *error = nil;
 	[_clientSocket connectToHost:host onPort:[port intValue] withTimeout:5 error:&error];
@@ -74,7 +74,7 @@
 }
 
 - (void) disconnectFromServer{
-	[_clientSocket disconnectAfterWriting];
+	[_clientSocket disconnect];
 	for (id<RGIRemoteGameInterfaceDelegate> delegate in _delegates) {
 		
 	}
@@ -195,6 +195,7 @@
  * The host parameter will be an IP address, not a DNS name.
  **/
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port{
+	_socketConnected = YES;
 	for (id<RGIRemoteGameInterfaceDelegate> delegate in _delegates) {
 		[delegate remoteGameInterfaceDidConnectSuccessfuly:self];
 	}
@@ -305,13 +306,24 @@
  * this delegate method will be called before the disconnect method returns.
  **/
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err{
-	//NSLog(@"socketDidDisconnect:withError:");
+	NSLog(@"socketDidDisconnect:withError:");
 	if(err){
-		for (id<RGIRemoteGameInterfaceDelegate> delegate in _delegates) {
-			[delegate remoteGameInterface:self didNotConnectWithError:err];
+		if(!_socketConnected)
+		{
+			for (id<RGIRemoteGameInterfaceDelegate> delegate in _delegates) 
+			{
+				[delegate remoteGameInterface:self didNotConnectWithError:err];
+			}
+		}
+		else
+		{
+			for (id<RGIRemoteGameInterfaceDelegate> delegate in _delegates) 
+			{
+				[delegate remoteGameInterface:self didDisconnectWithError:err];
+			}
 		}
 	}
-	
+	_socketConnected = NO;
 	[_clientSocket release];
 	_clientSocket = nil;
 }
