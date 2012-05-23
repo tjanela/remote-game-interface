@@ -410,6 +410,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
@@ -459,6 +460,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
@@ -508,6 +510,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
@@ -533,6 +536,7 @@
 				E216BE8B155BDBC900FEB0EF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E216BEB8155BDC2100FEB0EF /* Build configuration list for PBXNativeTarget "GCDAsyncSocket" */ = {
 			isa = XCConfigurationList;
@@ -541,6 +545,7 @@
 				E216BEBA155BDC2100FEB0EF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E216BEC7155BDCCF00FEB0EF /* Build configuration list for PBXNativeTarget "RemoteGameInterface" */ = {
 			isa = XCConfigurationList;
@@ -549,6 +554,7 @@
 				E216BEC9155BDCCF00FEB0EF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E2A4F319155BDB780008C136 /* Build configuration list for PBXProject "RGIApp-Mac" */ = {
 			isa = XCConfigurationList;
