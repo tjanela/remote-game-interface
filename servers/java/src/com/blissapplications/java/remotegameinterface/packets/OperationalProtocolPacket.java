@@ -37,6 +37,10 @@ public class OperationalProtocolPacket {
 	private byte[] _payload = new byte[PAYLOAD_MAX_SIZE];
 	private byte[] _magic = new byte[MAGIC_FIELD_LENGTH];
 
+	public OperationalProtocolPacketType getPacketType()
+	{
+		return _packetType;
+	}
 	public byte[] getId (){return _id;}
 	public byte[] getPayload(){return _payload;}
 	public byte[] getMagic(){return _magic;}
@@ -71,6 +75,7 @@ public class OperationalProtocolPacket {
 		return getPacket(type, ERROR_PAYLOAD);
 	}
 	
+	
 	public static OperationalProtocolPacket  getUnregisterDisplayClientRequest(OperationalServerHash hash) throws Exception{
 		String encodedHash = hash.toEncodedString();
 		return getPacket(OperationalProtocolPacketType.UnregisterDisplayClientRequest, encodedHash);
@@ -88,6 +93,10 @@ public class OperationalProtocolPacket {
 	
 	public static OperationalProtocolPacket getRegisterDisplayClientErrorResponse(String payload) throws Exception{
 		return getPacket(OperationalProtocolPacketType.RegisterDisplayClientResponse,payload);
+	}
+
+	public static OperationalProtocolPacket  getRegisterControlClientRequest(String hash) throws Exception{
+		return getPacket(OperationalProtocolPacketType.RegisterControlClientRequest, hash);
 	}
 	
 	public static OperationalProtocolPacket  getRegisterControlClientResponse(OperationalServerHash hash) throws Exception{
@@ -107,6 +116,10 @@ public class OperationalProtocolPacket {
 	public static OperationalProtocolPacket  getUnregisterDisplayClientResponse(OperationalServerHash hash) throws Exception{
 		String encodedHash = hash.toEncodedString();
 		return getPacket(OperationalProtocolPacketType.UnregisterDisplayClientResponse, encodedHash);
+	}
+	
+	public static OperationalProtocolPacket  getPayloadRequest(String payload) throws Exception{
+		return getPacket(OperationalProtocolPacketType.PayloadRequest, payload);
 	}
 	
 	public static OperationalProtocolPacket  getPayloadResponse() throws Exception{
