@@ -12,6 +12,7 @@ import android.hardware.SensorManager;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -475,9 +476,9 @@ public class TestActivity extends Activity implements IRemoteGameInterfaceEngine
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		if(event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
-      float x=event.values[0];
-      float y=event.values[1];
-      float z=event.values[2];
+      float x=event.values[0] / SensorManager.GRAVITY_EARTH;
+      float y=event.values[1] / SensorManager.GRAVITY_EARTH;
+      float z=event.values[2] / SensorManager.GRAVITY_EARTH;
 
       try
       {
