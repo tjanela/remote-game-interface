@@ -1,4 +1,4 @@
-package com.blissapplications.java.remotegameinterface;
+package com.blissapplications.java.remotegameinterface.engine;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,6 +26,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
 
+import com.blissapplications.java.remotegameinterface.TestApplication;
 import com.blissapplications.java.remotegameinterface.packets.OperationalProtocolPacket;
 import com.blissapplications.java.remotegameinterface.packets.OperationalProtocolPacketType;
 
@@ -326,9 +327,9 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 		{
 	    //Ask the user to enable GPS
 	    AlertDialog.Builder builder = new AlertDialog.Builder(callingActivity);
-	    builder.setTitle("Location Manager");
-	    builder.setMessage("Would you like to enable GPS?");
-	    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	    builder.setTitle("Geolocalização desligada");
+	    builder.setMessage("Precisamos de obter a tua geolocalização.\nQueres abrir as definições do teu dispositivo?");
+	    builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
 	        @Override
 	        public void onClick(DialogInterface dialog, int which) {
 	            //Launch settings, allowing user to make a change
@@ -337,7 +338,7 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 	            TestApplication.getContext().startActivity(i);
 	        }
 	    });
-	    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+	    builder.setNegativeButton("Agora não", new DialogInterface.OnClickListener() {
 	        @Override
 	        public void onClick(DialogInterface dialog, int which) {
 	        	state = RemoteGameInterfaceState.LocationNotAvailable;
@@ -364,12 +365,10 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 		
 		if(socket != null)
 		{
+			reader.close();
+			writer.close();
 			socket.close();	
 		}
-		
-		
-		
-		
 		
 		if(thread != null)
 		{
@@ -386,18 +385,27 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 		reader = socket.getInputStream();
 		thread = new Thread(){
 			
-			
 			@Override
-			public void run() {
+			public void run() 
+			{
 				ByteBuffer request = null;
 				OperationalProtocolPacket packet = null;
 				while(!exitThread){
-					try{
+					try
+					{
 						request = readRequest();
 						
 						if(request == null || request.capacity() == 0)
 						{
 							exitThread = Boolean.TRUE;
+							mHandler.post(new Runnable() {
+					      public void run() {
+					      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+									{
+					      		delegate.didDisconnect(null);
+									}
+					      }
+					    });
 							continue;
 						}
 						
@@ -406,6 +414,14 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 						if(packet == null)
 						{
 							exitThread = Boolean.TRUE;
+							mHandler.post(new Runnable() {
+					      public void run() {
+					      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+									{
+					      		delegate.didDisconnect(null);
+									}
+					      }
+					    });
 							continue;
 						}
 						
@@ -459,7 +475,7 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 							}
 							
 						}
-						else if(packetType.equals(OperationalProtocolPacketType.UnregisterControlClientResponse))
+						else if(packetType.equals(OperationalProtocolPacketType.UnregisterControlClientRequest))
 						{
 							mHandler.post(new Runnable() {
 					      public void run() {
@@ -507,12 +523,20 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 						      }
 						    });
 							}
-						}
+						}	
+					}
+					catch(final Exception ex)
+					{
 						
-				    
-						
-					}catch(Exception ex){
 						exitThread = Boolean.TRUE;
+						mHandler.post(new Runnable() {
+				      public void run() {
+				      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+								{
+				      		delegate.didDisconnect(ex);
+								}
+				      }
+				    });
 					}
 					Thread.yield();
 				}

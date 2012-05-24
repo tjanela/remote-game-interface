@@ -1,4 +1,4 @@
-package com.blissapplications.java.remotegameinterface;
+package com.blissapplications.java.remotegameinterface.engine;
 
 public class RemoteGameInterfaceConfiguration 
 {

@@ -319,7 +319,13 @@
 		{
 			for (id<RGIRemoteGameInterfaceDelegate> delegate in _delegates) 
 			{
-				[delegate remoteGameInterface:self didDisconnectWithError:err];
+				if(_clientType == kRGIClientType_Control)
+				{
+					[delegate remoteGameInterfaceControlClientDisconnected:self];
+				}
+				else
+				{
+					[delegate remoteGameInterfaceDisplayClientDisconnected:self];}
 			}
 		}
 	}
