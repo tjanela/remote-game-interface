@@ -381,7 +381,7 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 			exitThread = Boolean.TRUE;
 			Thread.yield();
 			if(thread.isAlive()){
-				thread.join();
+				thread.stop();
 			}
 			thread = null;
 		}
