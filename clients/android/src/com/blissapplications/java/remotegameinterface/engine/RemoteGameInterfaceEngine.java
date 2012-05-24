@@ -23,6 +23,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.Log;
 
 import com.blissapplications.java.remotegameinterface.packets.OperationalProtocolPacket;
 import com.blissapplications.java.remotegameinterface.packets.OperationalProtocolPacketType;
@@ -31,7 +32,6 @@ import cuub.android.kit.utils.Utils;
 
 public class RemoteGameInterfaceEngine implements ILocationListener 
 {
-	private static String CONFIGURATION_URL = "http://rest.dev.rockinrio.blissapplications.com/server-data/VideoWallConfiguration.txt";
 	private static RemoteGameInterfaceEngine DEFAULT_ENGINE;
 	
 	private RemoteGameInterfaceConfiguration configuration = null;
@@ -58,6 +58,12 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 		return state;
 	}
 	
+	public void reset()
+	{
+		status = RemoteGameInterfaceStatus.Newborn;
+		state = null;
+	}
+	
 	public static RemoteGameInterfaceEngine getDefaultEngine()
 	{
 			if(DEFAULT_ENGINE == null)
@@ -71,7 +77,6 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 	{
 		delegates = new ArrayList<IRemoteGameInterfaceEngineDelegate>();
 		status = RemoteGameInterfaceStatus.Newborn;
-		//state = RemoteGameInterfaceState.NotAvailable;
 	}
 	
 	public void addDelegate(IRemoteGameInterfaceEngineDelegate delegate)
@@ -90,11 +95,11 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 			}
 	}
 	
-	public void configure(Context context)
+	public void configure(Context context, String configUrl)
 	{
 		if(Utils.isInternetAvailable(context))
 		{
-			String response = Utils.getJSONString(CONFIGURATION_URL);
+			String response = Utils.getJSONString(configUrl);
 			
 	    if (Utils.isStringBlank(response))
 	    {
@@ -541,6 +546,7 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 					}
 					Thread.yield();
 				}
+				Log.d("RGI", "Thread Exiting!");
 			}
 			
 			public ByteBuffer readRequest() throws Exception{
@@ -688,6 +694,7 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 			{
 				delegate.didCheckState();
 			}
+			lm.stopLocating();
 			return;
 		}
 		
@@ -729,8 +736,8 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 		
 		try
 		{
-			lm.stopLocating();
 			this.connect(getConfiguration().Endpoint, getConfiguration().Port);
+			lm.stopLocating();
 		}
 		catch(Exception ex)
 		{
