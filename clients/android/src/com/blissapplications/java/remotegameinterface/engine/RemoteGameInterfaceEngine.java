@@ -22,11 +22,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.provider.Settings;
 
-import com.blissapplications.java.remotegameinterface.TestApplication;
 import com.blissapplications.java.remotegameinterface.packets.OperationalProtocolPacket;
 import com.blissapplications.java.remotegameinterface.packets.OperationalProtocolPacketType;
 
@@ -48,6 +45,8 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 	private MyLocationManager lm;
 	private boolean exitThread = false;
 	private boolean checkingState = false;
+	
+	Activity activity;
 	
 	public RemoteGameInterfaceStatus getStatus()
 	{
@@ -72,6 +71,7 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 	{
 		delegates = new ArrayList<IRemoteGameInterfaceEngineDelegate>();
 		status = RemoteGameInterfaceStatus.Newborn;
+		//state = RemoteGameInterfaceState.NotAvailable;
 	}
 	
 	public void addDelegate(IRemoteGameInterfaceEngineDelegate delegate)
@@ -90,9 +90,9 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 			}
 	}
 	
-	public void configure()
+	public void configure(Context context)
 	{
-		if(Utils.isInternetAvailable(TestApplication.getContext()))
+		if(Utils.isInternetAvailable(context))
 		{
 			String response = Utils.getJSONString(CONFIGURATION_URL);
 			
@@ -306,13 +306,14 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 		}
 	}
 
-	public void checkState(Activity callingActivity)
+	public void checkState(final Activity callingActivity)
 	{
+		activity = callingActivity;
 		if(!status.equals(RemoteGameInterfaceStatus.Configured))
 		{
 			return;
 		}
-		lm = new MyLocationManager(TestApplication.getContext(), 10000, 100);
+		lm = new MyLocationManager(callingActivity, 10000, 100);
 		
 		if(!GPSAvailable())
 		{
@@ -335,7 +336,7 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 	            //Launch settings, allowing user to make a change
 	            Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 	            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	            TestApplication.getContext().startActivity(i);
+	            callingActivity.startActivity(i);
 	        }
 	    });
 	    builder.setNegativeButton("Agora não", new DialogInterface.OnClickListener() {
@@ -692,7 +693,7 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 		
 		if(getConfiguration().Infrastructure.equals(RemoteGameInterfaceInfrastucture.AdHoc))
 		{
-			if(!Utils.isConnectedToWiFi(TestApplication.getContext()))
+			if(!Utils.isConnectedToWiFi(activity))
 			{
 				state = RemoteGameInterfaceState.AdHocInfrastrucureAndNotConnectedToCorrectAccessPoint;
 				for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
@@ -702,7 +703,7 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 				lm.stopLocating();
 				return;
 			}
-			if(!Utils.getWiFiSSID(TestApplication.getContext()).equals(getConfiguration().AdHocAccessPointSSID)){
+			if(!Utils.getWiFiSSID(activity).equals(getConfiguration().AdHocAccessPointSSID)){
 				state = RemoteGameInterfaceState.AdHocInfrastrucureAndNotConnectedToCorrectAccessPoint;
 				for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
 				{
@@ -713,7 +714,7 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 			}
 			if(getConfiguration().AdHocAccessPointBSSID != null && 
 					!getConfiguration().AdHocAccessPointBSSID.equals("") &&
-					Utils.getWiFiBSSID(TestApplication.getContext()).equals(getConfiguration().AdHocAccessPointBSSID)){
+					Utils.getWiFiBSSID(activity).equals(getConfiguration().AdHocAccessPointBSSID)){
 				state = RemoteGameInterfaceState.AdHocInfrastrucureAndNotConnectedToCorrectAccessPoint;
 				for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
 				{
@@ -763,7 +764,7 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 	
 	public boolean GPSAvailable() 
 	{
-    LocationManager loc_manager = (LocationManager)TestApplication.getContext().getSystemService(Context.LOCATION_SERVICE);
+    LocationManager loc_manager = (LocationManager)activity.getSystemService(Context.LOCATION_SERVICE);
     List<String> str = loc_manager.getProviders(true);
 
     if(str.size()>0)
