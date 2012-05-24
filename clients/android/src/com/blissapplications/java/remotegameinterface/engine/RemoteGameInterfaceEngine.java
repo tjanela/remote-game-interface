@@ -626,7 +626,8 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 	{
 		try
 		{
-			writer.flush();
+			writer.close();
+			reader.close();
 			socket.close();
 		}
 		catch(Exception e)
