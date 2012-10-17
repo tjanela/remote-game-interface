@@ -110,7 +110,7 @@
 	
 	NSString *payloadString = [[[NSString alloc] initWithData:_payload encoding:NSUTF8StringEncoding] autorelease];
 	NSString *magicString = [[[NSString alloc] initWithData:_magic encoding:NSUTF8StringEncoding] autorelease];
-	return [NSString stringWithFormat:@"<0x%X|%@|%@>",packetType, payloadString, magicString];
+	return [NSString stringWithFormat:@"<0x%lX|%@|%@>",packetType, payloadString, magicString];
 }
 
 + (RGIPacket*) packetRequestRegisterDisplayClient{

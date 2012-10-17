@@ -414,7 +414,7 @@
 		E265FA11148AA43D004A1114 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Bliss Applications";
 			};
 			buildConfigurationList = E265FA14148AA43D004A1114 /* Build configuration list for PBXProject "RGIApp" */;
