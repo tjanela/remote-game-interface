@@ -139,7 +139,7 @@
 
 + (RGIPacket*) packetRequestPayload:(NSData *)data{
 	RGIPacket *packet = [[RGIPacket alloc] initWithId:kRGIPacket_PayloadRequest payloadData:data];
-	NSLog(@"Created packet: %@",packet);
+	//NSLog(@"Created packet: %@",packet);
 	return [packet autorelease];
 }
 
