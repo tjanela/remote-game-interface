@@ -242,7 +242,7 @@
  * Called when a socket has completed writing the requested data. Not called if there is an error.
  **/
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag{
-	//NSLog(@"socket:didWriteDataWithTag:withTag:");
+	NSLog(@"socket:didWriteDataWithTag:withTag:");
 }
 
 /**
@@ -250,7 +250,7 @@
  * It may be used to for things such as updating progress bars.
  **/
 - (void)socket:(GCDAsyncSocket *)sock didWritePartialDataOfLength:(NSUInteger)partialLength tag:(long)tag{
-	//NSLog(@"socket:didWritePartialDataOfLength:tag:");
+	NSLog(@"socket:didWritePartialDataOfLength:tag:");
 }
 
 /**
