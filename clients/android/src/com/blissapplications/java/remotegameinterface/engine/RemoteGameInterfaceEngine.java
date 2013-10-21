@@ -8,10 +8,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.blissapplications.android.utils.BlissJsonUtils;
+import com.blissapplications.android.utils.BlissNetworkUtils;
+import com.blissapplications.android.utils.BlissStringUtils;
+import org.andengine.input.sensor.location.ILocationListener;
+import org.andengine.util.ConnectivityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cuub.android.kit.location.*;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -25,12 +29,12 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.blissapplications.java.remotegameinterface.context.OperationalServerHash;
 import com.blissapplications.java.remotegameinterface.packets.OperationalProtocolPacket;
 import com.blissapplications.java.remotegameinterface.packets.OperationalProtocolPacketType;
+import com.blissapplications.remotegameinterface.R;
 
-import cuub.android.kit.utils.Utils;
-
-public class RemoteGameInterfaceEngine implements ILocationListener 
+public class RemoteGameInterfaceEngine implements ILocationListener
 {
 	private static RemoteGameInterfaceEngine DEFAULT_ENGINE;
 	
@@ -42,9 +46,9 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 	private List<IRemoteGameInterfaceEngineDelegate> delegates;
 	private RemoteGameInterfaceState state;
 	private RemoteGameInterfaceStatus status;
-	private MyLocationManager lm;
 	private boolean exitThread = false;
 	private boolean checkingState = false;
+	private Context context;
 	
 	Activity activity;
 	
@@ -64,533 +68,582 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 		state = null;
 	}
 	
-	public static RemoteGameInterfaceEngine getDefaultEngine()
+	public static RemoteGameInterfaceEngine getDefaultEngine(Context context)
 	{
-			if(DEFAULT_ENGINE == null)
-			{
-				DEFAULT_ENGINE = new RemoteGameInterfaceEngine();
-			}
-			return DEFAULT_ENGINE;
+		if (DEFAULT_ENGINE == null)
+		{
+			DEFAULT_ENGINE = new RemoteGameInterfaceEngine(context);
+		}
+		return DEFAULT_ENGINE;
 	}
 	
-	private RemoteGameInterfaceEngine()
+	private RemoteGameInterfaceEngine(Context context)
 	{
 		delegates = new ArrayList<IRemoteGameInterfaceEngineDelegate>();
 		status = RemoteGameInterfaceStatus.Newborn;
+		this.context = context;
 	}
 	
 	public void addDelegate(IRemoteGameInterfaceEngineDelegate delegate)
 	{
-			if(!delegates.contains(delegate))
-			{
-				delegates.add(delegate);
-			}
+		if (!delegates.contains(delegate))
+		{
+			delegates.add(delegate);
+		}
 	}
 	
 	public void removeDelegate(IRemoteGameInterfaceEngineDelegate delegate)
 	{
-			if(delegates.contains(delegate))
-			{
-				delegates.remove(delegate);
-			}
+		if (delegates.contains(delegate))
+		{
+			delegates.remove(delegate);
+		}
+	}
+	
+	public void configure(Context context, String url, int port) {
+		RemoteGameInterfaceConfiguration configuration = new RemoteGameInterfaceConfiguration();
+		configuration.Endpoint = url;
+		configuration.Port = port;
+		configuration.Availability = RemoteGameInterfaceAvailability.Rockin;
+		configuration.AvailabilityRadius = 0;
+		setConfiguration(configuration);
+		state = RemoteGameInterfaceState.AllOK;
+		status = RemoteGameInterfaceStatus.Configured;
+		for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
+		{
+			delegate.didConfigure();
+		}
 	}
 	
 	public void configure(Context context, String configUrl)
 	{
-		if(Utils.isInternetAvailable(context))
+		if (BlissNetworkUtils.isInternetAvailable(context))
 		{
-			String response = Utils.getJSONString(configUrl);
+			String response = BlissJsonUtils.getJSONString(configUrl);
 			
-	    if (Utils.isStringBlank(response))
-	    {
-	    	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+			if (BlissStringUtils.isStringBlank(response))
+			{
+				for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 				{
 					delegate.didNotConfigure(RemoteGameInterfaceError.CantLoadConfigFile);
 				}
-	    	return;
-	    }
-	    
-	    response = Utils.formatStringToStartWithFistChar(response, '{');
-
-	    try {
-	      JSONObject configurationObject = new JSONObject(response);
-	      
-	      if (Utils.isJSONObjectBlank(configurationObject))
-	      {
-	      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+				return;
+			}
+			
+			response = BlissStringUtils.formatStringToStartWithFistChar(response, '{');
+			
+			try {
+				JSONObject configurationObject = new JSONObject(response);
+				
+				if (BlissJsonUtils.isJSONObjectBlank(configurationObject))
+				{
+					for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 					{
-	      		delegate.didNotConfigure(RemoteGameInterfaceError.CantLoadConfigFile);
-					}	
-	      	return;
-	      }
-	      	
-	      RemoteGameInterfaceConfiguration configuration = new RemoteGameInterfaceConfiguration();
-	      
-	      String infrastructure = null;
-	      
-	      try{
-	      	infrastructure = configurationObject.getString("Infrastructure");
-	      }catch(JSONException ex){}
-	      
-	      if(infrastructure == null)
-	      {
-	      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
-					{
-		    		delegate.didNotConfigure(RemoteGameInterfaceError.MissingInfrastructureKeyOrValueOnConfiguration);
+						delegate.didNotConfigure(RemoteGameInterfaceError.CantLoadConfigFile);
 					}
-	      	return;
-	      }
-	      else if(infrastructure.equals("AdHoc"))
-	      {
-	      	configuration.Infrastructure = RemoteGameInterfaceInfrastucture.AdHoc;
-	      }
-	      else if(infrastructure.equals("Public"))
-	      {
-	      	configuration.Infrastructure = RemoteGameInterfaceInfrastucture.Public;
-	      }
-	      else
-	      {
-		     	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+					return;
+				}
+				
+				RemoteGameInterfaceConfiguration configuration = new RemoteGameInterfaceConfiguration();
+				
+				String infrastructure = null;
+				
+				try {
+					infrastructure = configurationObject.getString("Infrastructure");
+				} catch (JSONException ex) {
+				}
+				
+				if (infrastructure == null)
+				{
+					for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 					{
-			    	delegate.didNotConfigure(RemoteGameInterfaceError.MissingInfrastructureKeyOrValueOnConfiguration);
+						delegate.didNotConfigure(RemoteGameInterfaceError.MissingInfrastructureKeyOrValueOnConfiguration);
 					}
-		      return;
-	      }
-	      
-	      
-	      String availability = null;
-	      
-	      try{
-	      	availability = configurationObject.getString("Availability");
-	      }catch (JSONException e) {}
-	      
-	      if(availability == null){
-	      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+					return;
+				}
+				else if (infrastructure.equals("AdHoc"))
+				{
+					configuration.Infrastructure = RemoteGameInterfaceInfrastucture.AdHoc;
+				}
+				else if (infrastructure.equals("Public"))
+				{
+					configuration.Infrastructure = RemoteGameInterfaceInfrastucture.Public;
+				}
+				else
+				{
+					for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 					{
-		    		delegate.didNotConfigure(RemoteGameInterfaceError.MissingAvailabilityKeyOrValueOnConfiguration);
+						delegate.didNotConfigure(RemoteGameInterfaceError.MissingInfrastructureKeyOrValueOnConfiguration);
 					}
-	      	return;
-	      }
-	      else if(availability.equals("BeforeEvent"))
-	      {
-	      	configuration.Availability = RemoteGameInterfaceAvailability.BeforeEvent;
-	      }
-	      else if(availability.equals("Rockin"))
-	      {
-	      	configuration.Availability = RemoteGameInterfaceAvailability.Rockin;
-	      }
-	      else if(availability.equals("AfterEvent"))
-	      {
-	      	configuration.Availability = RemoteGameInterfaceAvailability.AfterEvent;
-	      }
-	      else
-	      {
-	      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+					return;
+				}
+				
+				String availability = null;
+				
+				try {
+					availability = configurationObject.getString("Availability");
+				} catch (JSONException e) {
+				}
+				
+				if (availability == null) {
+					for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 					{
-		    		delegate.didNotConfigure(RemoteGameInterfaceError.MissingAvailabilityKeyOrValueOnConfiguration);
+						delegate.didNotConfigure(RemoteGameInterfaceError.MissingAvailabilityKeyOrValueOnConfiguration);
 					}
-	      	return;
-	      }
-	      
-	      try{
-	      	configuration.AdHocAccessPointPassword = configurationObject.getString("AdHocAccessPointPassword");
-	      }catch(JSONException ex){}
-	      
-	      try{
-	      	configuration.AdHocAccessPointSSID = configurationObject.getString("AdHocAccessPointSSID");
-	      }catch(JSONException ex){}
-	      
-	      try{
-	      	configuration.AdHocAccessPointBSSID = configurationObject.getString("AdHocAccessPointBSSID");
-	      }catch(JSONException ex){}
-	      
-	      if(configuration.Infrastructure.equals(RemoteGameInterfaceInfrastucture.AdHoc))
-	      {
-	      	if(configuration.AdHocAccessPointSSID == null ||
-	      			configuration.AdHocAccessPointSSID.equals(""))
-	      	{
-	      		for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+					return;
+				}
+				else if (availability.equals("BeforeEvent"))
+				{
+					configuration.Availability = RemoteGameInterfaceAvailability.BeforeEvent;
+				}
+				else if (availability.equals("Rockin"))
+				{
+					configuration.Availability = RemoteGameInterfaceAvailability.Rockin;
+				}
+				else if (availability.equals("AfterEvent"))
+				{
+					configuration.Availability = RemoteGameInterfaceAvailability.AfterEvent;
+				}
+				else
+				{
+					for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
+					{
+						delegate.didNotConfigure(RemoteGameInterfaceError.MissingAvailabilityKeyOrValueOnConfiguration);
+					}
+					return;
+				}
+				
+				try {
+					configuration.AdHocAccessPointPassword = configurationObject.getString("AdHocAccessPointPassword");
+				} catch (JSONException ex) {
+				}
+				
+				try {
+					configuration.AdHocAccessPointSSID = configurationObject.getString("AdHocAccessPointSSID");
+				} catch (JSONException ex) {
+				}
+				
+				try {
+					configuration.AdHocAccessPointBSSID = configurationObject.getString("AdHocAccessPointBSSID");
+				} catch (JSONException ex) {
+				}
+				
+				if (configuration.Infrastructure.equals(RemoteGameInterfaceInfrastucture.AdHoc))
+				{
+					if (configuration.AdHocAccessPointSSID == null ||
+					  configuration.AdHocAccessPointSSID.equals(""))
+					{
+						for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 						{
-			    		delegate.didNotConfigure(RemoteGameInterfaceError.MissingAdHocAccessPointKeyOrValueOnConfiguration);
+							delegate.didNotConfigure(RemoteGameInterfaceError.MissingAdHocAccessPointKeyOrValueOnConfiguration);
 						}
-		      	return;
-	      	}
-	      }
-	      
-	      try
-	      {
-	      	configuration.Endpoint = configurationObject.getString("Endpoint");
-	      }
-	      catch(JSONException e)
-	      {}
-	      if(configuration.Endpoint == null || configuration.Endpoint.equals(""))
-	      {
-	      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
-	      	{
-	      		delegate.didNotConfigure(RemoteGameInterfaceError.MissingEndpointKeyOrValueOnConfiguration);
-	      	}
-	      	return;
-	      }
-	      
-	      try
-	      {
-	      	configuration.AvailabilityRadius = configurationObject.getDouble("AvailabilityRadius");
-	      }catch (JSONException e) {}
-	      
-	      if(configuration.Endpoint == null || configuration.Endpoint.equals(""))
-	      {
-	      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
-					{
-		    		delegate.didNotConfigure(RemoteGameInterfaceError.MissingEndpointKeyOrValueOnConfiguration);
+						return;
 					}
-	      	return;
-	      }
-	      
-	      try
-	      {
-	      	configuration.Longitude = configurationObject.getDouble("Longitude");
-	      } 
-	      catch(JSONException e)
-	      {
-	      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
-					{
-		    		delegate.didNotConfigure(RemoteGameInterfaceError.MissingLongitudeKeyOrValueOnConfiguration);
-					}
-	      	return;
-	      }
-	      
-	      try
-	      {
-	      	configuration.Latitude = configurationObject.getDouble("Latitude");
-	      } 
-	      catch(JSONException e)
-	      {
-	      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
-					{
-		    		delegate.didNotConfigure(RemoteGameInterfaceError.MissingLatitudeKeyOrValueOnConfiguration);
-					}
-	      	return;
-	      }
-	      
-	      try
-	      {
-	      	configuration.Port = configurationObject.getInt("Port");
-	      }
-	      catch(JSONException e)
-	      {
-	      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
-					{
-		    		delegate.didNotConfigure(RemoteGameInterfaceError.MissingPortKeyOrValueOnConfiguration);
-					}
-	      	return;
-	      }
-	      
-	      setConfiguration(configuration);
-	     
-	      status = RemoteGameInterfaceStatus.Configured;
-	      
-	      for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
-				{
-	    		delegate.didConfigure();
 				}
-	    }
-	    catch(Exception e)
-	    {
-	    	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+				
+				try
 				{
-	    		delegate.didNotConfigure(RemoteGameInterfaceError.CantLoadConfigFile);
+					configuration.Endpoint = configurationObject.getString("Endpoint");
+				} catch (JSONException e)
+				{
 				}
-	    }
+				if (configuration.Endpoint == null || configuration.Endpoint.equals(""))
+				{
+					for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
+					{
+						delegate.didNotConfigure(RemoteGameInterfaceError.MissingEndpointKeyOrValueOnConfiguration);
+					}
+					return;
+				}
+				
+				try
+				{
+					configuration.AvailabilityRadius = configurationObject.getDouble("AvailabilityRadius");
+				} catch (JSONException e) {
+				}
+				
+				if (configuration.Endpoint == null || configuration.Endpoint.equals(""))
+				{
+					for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
+					{
+						delegate.didNotConfigure(RemoteGameInterfaceError.MissingEndpointKeyOrValueOnConfiguration);
+					}
+					return;
+				}
+				
+				try
+				{
+					configuration.Longitude = configurationObject.getDouble("Longitude");
+				} catch (JSONException e)
+				{
+					for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
+					{
+						delegate.didNotConfigure(RemoteGameInterfaceError.MissingLongitudeKeyOrValueOnConfiguration);
+					}
+					return;
+				}
+				
+				try
+				{
+					configuration.Latitude = configurationObject.getDouble("Latitude");
+				} catch (JSONException e)
+				{
+					for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
+					{
+						delegate.didNotConfigure(RemoteGameInterfaceError.MissingLatitudeKeyOrValueOnConfiguration);
+					}
+					return;
+				}
+				
+				try
+				{
+					configuration.Port = configurationObject.getInt("Port");
+				} catch (JSONException e)
+				{
+					for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
+					{
+						delegate.didNotConfigure(RemoteGameInterfaceError.MissingPortKeyOrValueOnConfiguration);
+					}
+					return;
+				}
+				
+				setConfiguration(configuration);
+				
+				status = RemoteGameInterfaceStatus.Configured;
+				
+				for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
+				{
+					delegate.didConfigure();
+				}
+			} catch (Exception e)
+			{
+				for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
+				{
+					delegate.didNotConfigure(RemoteGameInterfaceError.CantLoadConfigFile);
+				}
+			}
 		}
 		else
 		{
-			for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+			for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 			{
 				delegate.didNotConfigure(RemoteGameInterfaceError.CantLoadConfigFile);
 			}
 		}
 	}
-
+	
 	public void checkState(final Activity callingActivity)
 	{
 		activity = callingActivity;
-		if(!status.equals(RemoteGameInterfaceStatus.Configured))
+		
+		if (!status.equals(RemoteGameInterfaceStatus.Configured))
 		{
 			return;
 		}
-		lm = new MyLocationManager(callingActivity, 10000, 100);
 		
-		if(!GPSAvailable())
-		{
-			state = RemoteGameInterfaceState.LocationNotAvailable;
-			for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+		if (configuration.AvailabilityRadius == 0) {
+			for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 			{
 				delegate.didCheckState();
 			}
 			return;
 		}
-		else if(!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) 
+		
+		lm = new MyLocationManager(callingActivity, 10000, 100);
+		
+		if (!GPSAvailable())
 		{
-	    //Ask the user to enable GPS
-	    AlertDialog.Builder builder = new AlertDialog.Builder(callingActivity);
-	    builder.setTitle("Geolocalização desligada");
-	    builder.setMessage("Precisamos de obter a tua geolocalização.\nQueres abrir as definições do teu dispositivo?");
-	    builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-	        @Override
-	        public void onClick(DialogInterface dialog, int which) {
-	            //Launch settings, allowing user to make a change
-	            Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-	            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	            callingActivity.startActivity(i);
-	        }
-	    });
-	    builder.setNegativeButton("Agora não", new DialogInterface.OnClickListener() {
-	        @Override
-	        public void onClick(DialogInterface dialog, int which) {
-	        	state = RemoteGameInterfaceState.LocationNotAvailable;
-	    			for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
-	    			{
-	    				delegate.didCheckState();
-	    			}
-	    			return;
-	        }
-	    });
-	    builder.create().show();
-		}else{
+			state = RemoteGameInterfaceState.LocationNotAvailable;
+			for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
+			{
+				delegate.didCheckState();
+			}
+			return;
+		}
+		else if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER))
+		{
+			// Ask the user to enable GPS
+			AlertDialog.Builder builder = new AlertDialog.Builder(callingActivity);
+			builder.setTitle("Geolocalização desligada");
+			builder.setMessage("Precisamos de obter a tua geolocalização.\nQueres abrir as definições do teu dispositivo?");
+			builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// Launch settings, allowing user to make a change
+					Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+					i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					callingActivity.startActivity(i);
+				}
+			});
+			builder.setNegativeButton("Agora não", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					state = RemoteGameInterfaceState.LocationNotAvailable;
+					for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
+					{
+						delegate.didCheckState();
+					}
+					return;
+				}
+			});
+			builder.create().show();
+		} else {
 			lm.setILocationListener(this);
 			lm.startLocating();
 		}
 	}
 	
-
 	final Handler mHandler = new Handler();
 
-	
+	boolean wasAskedToDisconnect;
 	public void connect(String host, int port) throws Exception
 	{
 		
-		if(socket != null)
+		if (socket != null)
 		{
 			reader.close();
 			writer.close();
-			socket.close();	
+			socket.close();
 		}
 		
-		if(thread != null)
+		if (thread != null)
 		{
 			exitThread = Boolean.TRUE;
 			Thread.yield();
-			if(thread.isAlive()){
+			if (thread.isAlive()) {
 				thread.stop();
 			}
 			thread = null;
 		}
 		exitThread = Boolean.FALSE;
-		socket = new Socket(host,port);
+		wasAskedToDisconnect = false;
+		
+		socket = new Socket(host, port);
 		writer = socket.getOutputStream();
 		reader = socket.getInputStream();
-		thread = new Thread(){
+		
+		thread = new Thread() {
 			
 			@Override
-			public void run() 
+			public void run()
 			{
+				
 				ByteBuffer request = null;
 				OperationalProtocolPacket packet = null;
-				while(!exitThread){
+				
+				while (!exitThread) {
 					try
 					{
+						
 						request = readRequest();
 						
-						if(request == null || request.capacity() == 0)
+						if (request == null || request.capacity() == 0)
 						{
 							exitThread = Boolean.TRUE;
-							mHandler.post(new Runnable() {
-					      public void run() {
-					      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
-									{
-					      		delegate.didDisconnect(null);
-									}
-					      }
-					    });
+
+							didDisconnectLogic();
 							continue;
 						}
 						
 						packet = OperationalProtocolPacket.decode(request);
 						
-						if(packet == null)
+						if (packet == null)
 						{
 							exitThread = Boolean.TRUE;
-							mHandler.post(new Runnable() {
-					      public void run() {
-					      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
-									{
-					      		delegate.didDisconnect(null);
-									}
-					      }
-					    });
+							
+							didDisconnectLogic();
 							continue;
 						}
 						
 						String payload = new String(packet.getPayload());
+						
+						//MyLog.i("RGI", "RX: " + payload);
+						
 						OperationalProtocolPacketType packetType = packet.getPacketType();
 						
-						if(packetType.equals(OperationalProtocolPacketType.RegisterControlClientResponse))
+						if (packetType.equals(OperationalProtocolPacketType.RegisterControlClientResponse))
 						{
-							if(payload.equals("UNKNOWN_HASH"))
+							if (payload.equals("UNKNOWN_HASH"))
 							{
 								mHandler.post(new Runnable() {
-						      public void run() {
-						      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+									public void run() {
+										for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 										{
-						      		delegate.didNotRegister(new Exception("Código inválido!"));
+											delegate.didNotRegister(new Exception(context.getString(R.string.rgi_invalid_code)));
 										}
-						      }
-						    });
+									}
+								});
 							}
-							else if(payload.equals("ERROR"))
+							else if (payload.equals("ERROR"))
 							{
 								mHandler.post(new Runnable() {
-						      public void run() {
-						      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+									public void run() {
+										for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 										{
-						      		delegate.didNotRegister(new Exception("Ocorreu um erro!"));
+											delegate.didNotRegister(new Exception(context.getString(R.string.rgi_error_occured)));
 										}
-						      }
-						    });
+									}
+								});
 							}
-							else if(payload.equals("ALREADY_REGISTERED"))
+							else if (payload.equals("ALREADY_REGISTERED"))
 							{
 								mHandler.post(new Runnable() {
-						      public void run() {
-						      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+									public void run() {
+										for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 										{
-						      		delegate.didNotRegister(new Exception("Código já registado!"));
+											delegate.didNotRegister(new Exception(context.getString(R.string.rgi_already_used_code)));
 										}
-						      }
-						    });
+									}
+								});
 							}
 							else {
 								mHandler.post(new Runnable() {
-						      public void run() {
-						      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+									public void run() {
+										for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 										{
-						      		delegate.didRegister();
+											delegate.didRegister();
 										}
-						      }
-						    });	
+									}
+								});
 							}
 							
 						}
-						else if(packetType.equals(OperationalProtocolPacketType.UnregisterControlClientRequest))
+						else if (packetType.equals(OperationalProtocolPacketType.UnregisterControlClientRequest))
 						{
 							mHandler.post(new Runnable() {
-					      public void run() {
-					      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+								public void run() {
+									for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 									{
-					      		delegate.didDisconnect(new Exception("Client disconnected."));
+										delegate.didDisconnect(new Exception(context.getString(R.string.rgi_server_disconnected)));
 									}
-					      }
-					    });
+								}
+							});
 						}
-						else if(packetType.equals(OperationalProtocolPacketType.PayloadRequest) || 
-								packetType.equals(OperationalProtocolPacketType.PayloadResponse))
+						else if (packetType.equals(OperationalProtocolPacketType.PayloadRequest) ||
+						  packetType.equals(OperationalProtocolPacketType.PayloadResponse))
 						{
-							if(payload.equals("OLEH")){
+							if (payload.equals("OLEH")) {
 								mHandler.post(new Runnable() {
-						      public void run() {
-						      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+									public void run() {
+										for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 										{
-						      		delegate.didReceiveHandshakeResponse();
+											delegate.didReceiveHandshakeResponse();
 										}
-						      }
-						    });
+									}
+								});
 							}
-							else if(payload.startsWith("SCORE:")){
+							else if (payload.startsWith("SCORE:")) {
 								String scoreString = payload.replace("SCORE:", "");
 								final float score = Float.parseFloat(scoreString);
 								mHandler.post(new Runnable() {
-						      public void run() {
-						      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+									public void run() {
+										for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 										{
-						      		delegate.didReceiveScore(score);
+											delegate.didReceiveScore(score);
 										}
-						      }
-						    });
+									}
+								});
 							}
-							else if(payload.startsWith("FINISH:")){
-								String scoreString = payload.replace("FINISH:", "");
-								final float score = Float.parseFloat(scoreString);
+							else if (payload.startsWith("FINAL:")) {
+								String[] vars = payload.split("\\|");
+								int score = 0;
+								int items = 0;
+								int penalties = 0;
+								for (int i = 0; i < vars.length; i++) {
+									String[] keyValue = vars[i].split(":");
+									if (keyValue[0].equals("FINAL")) {
+										score = Integer.parseInt(keyValue[1]);
+									}
+									else if (keyValue[0].equals("ITEMS")) {
+										items = Integer.parseInt(keyValue[1]);
+									}
+									else if (keyValue[0].equals("PENALTIES")) {
+										penalties = Integer.parseInt(keyValue[1]);
+									}
+								}
+								
+								final int fScore = score;
+								final int fItems = items;
+								final int fPenalties = penalties;
 								mHandler.post(new Runnable() {
-						      public void run() {
-						      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+									public void run() {
+										for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 										{
-						      		delegate.didReceiveFinish(score);
+											delegate.didReceiveFinish(fScore, fItems, fPenalties);
 										}
-						      }
-						    });
+									}
+								});
 							}
-						}	
+						}
 					}
-					catch(final Exception ex)
+					catch (final Exception ex)
 					{
 						
+						Log.e("RGI", "Exception on socket thread!", ex);
 						exitThread = Boolean.TRUE;
-						mHandler.post(new Runnable() {
-				      public void run() {
-				      	for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
-								{
-				      		delegate.didDisconnect(ex);
-								}
-				      }
-				    });
+						didDisconnectLogic();
 					}
 					Thread.yield();
 				}
 				Log.d("RGI", "Thread Exiting!");
 			}
 			
-			public ByteBuffer readRequest() throws Exception{
-				return readFromInputStream(reader,OperationalProtocolPacket.PACKET_MAX_SIZE);
+			private void didDisconnectLogic() {
+				if(!wasAskedToDisconnect){
+					
+					mHandler.post(new Runnable() {
+						public void run() {
+						for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
+						{
+							delegate.didDisconnect(null);
+						}
+					}
+					});
+				}
+      }
+
+			public ByteBuffer readRequest() throws Exception {
+				return readFromInputStream(reader, OperationalProtocolPacket.PACKET_MAX_SIZE);
 			}
 			
-			protected ByteBuffer readFromInputStream(InputStream inputStream, Integer maxBytes) throws Exception{
+			protected ByteBuffer readFromInputStream(InputStream inputStream, Integer maxBytes) throws Exception {
 				ByteBuffer buffer = ByteBuffer.allocate(maxBytes);
 				buffer.mark();
 				int codePoint;
 				boolean magicFound = false;
-
+				
 				int packetSize = 0;
 				byte[] ourMagic = new byte[OperationalProtocolPacket.MAGIC_FIELD_LENGTH];
 				do {
 					codePoint = inputStream.read();
-					byte readByte = (byte)(codePoint & 0xff);
+					byte readByte = (byte) (codePoint & 0xff);
 					buffer.put(readByte);
-					if(buffer.position() >= OperationalProtocolPacket.PACKET_MIN_SIZE){
+					if (buffer.position() >= OperationalProtocolPacket.PACKET_MIN_SIZE) {
 						buffer.position(buffer.position() - OperationalProtocolPacket.MAGIC_FIELD_LENGTH);
 						buffer.get(ourMagic, 0, OperationalProtocolPacket.MAGIC_FIELD_LENGTH);
-						if(Arrays.equals(ourMagic, OperationalProtocolPacket.MAGIC_FIELD)){
+						if (Arrays.equals(ourMagic, OperationalProtocolPacket.MAGIC_FIELD)) {
 							magicFound = true;
 							packetSize = buffer.position();
 						}
 					}
-				}	while (!magicFound && buffer.position() < maxBytes && codePoint != -1);
-
+				} while (!magicFound && buffer.position() < maxBytes && codePoint != -1);
+				
 				buffer.reset();
 				
 				ByteBuffer trimmedByteBuffer = ByteBuffer.allocate(packetSize);
 				trimmedByteBuffer.mark();
-				trimmedByteBuffer.put(buffer.array(),0,packetSize);
+				trimmedByteBuffer.put(buffer.array(), 0, packetSize);
 				trimmedByteBuffer.reset();
-
+				
 				return trimmedByteBuffer;
 			}
 		};
 		
-		if(checkingState)
+		if (checkingState)
 		{
 			checkingState = false;
 			
-			if(socket.isConnected())
+			if (socket.isConnected())
 			{
 				state = RemoteGameInterfaceState.AllOK;
 			}
@@ -599,39 +652,49 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 				state = RemoteGameInterfaceState.NotAvailable;
 			}
 			
-			for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+			for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 			{
 				delegate.didCheckState();
 			}
 			return;
 		}
 		
-		if(socket.isConnected())
+		if (socket.isConnected())
 		{
 			thread.start();
-			for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+			for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 			{
 				delegate.didConnect();
 			}
 		}
 		else
 		{
-			for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+			for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 			{
 				delegate.didNotConnect(new Exception());
 			}
 		}
 	}
+	
 	public void disconnect()
 	{
 		try
 		{
+			Log.d("RGI", "Disconnecting...");
+			if (code != null) {
+				OperationalProtocolPacket packet = OperationalProtocolPacket.getUnregisterControlClientRequest(OperationalServerHash.fromEncodedString(code));
+				ByteBuffer byteBuffer = OperationalProtocolPacket.encode(packet);
+				
+				writer.write(byteBuffer.array());
+				
+			}
+			wasAskedToDisconnect = true;
 			writer.close();
 			reader.close();
 			socket.close();
+		} catch (Exception e)
+		{
 		}
-		catch(Exception e)
-		{	}
 		
 		exitThread = Boolean.TRUE;
 		thread = null;
@@ -642,8 +705,11 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 		socket = null;
 	}
 	
+	String code;
+	
 	public void register(String code) throws Exception
 	{
+		this.code = code;
 		OperationalProtocolPacket packet = OperationalProtocolPacket.getRegisterControlClientRequest(code);
 		ByteBuffer byteBuffer = OperationalProtocolPacket.encode(packet);
 		writer.write(byteBuffer.array());
@@ -655,6 +721,11 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 		sendPayload("HELO");
 	}
 	
+	public void sendShare(String playerName) throws Exception {
+		
+		sendPayload("SHARE:" + playerName);
+	}
+	
 	public void sendStartGame(String playerName) throws Exception
 	{
 		sendPayload("START:" + playerName);
@@ -662,21 +733,23 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 	
 	public void sendControlData(float x, float y, float z, boolean a, boolean b) throws Exception
 	{
-		sendPayload("<CONTROL>AX:" + x + "|AY:" + y + "|AZ:" + z + "|A:" + (a ? "1" : "0") + "|B:" + (b ? "1" : "0"));
+		sendPayload("<CONTROL>AX:" + x + "|AY:" + y + "|C1:" + (a ? "1" : "0") + "|C2:" + (b ? "1" : "0"));
 		
 	}
 	
 	private void sendPayload(String payload) throws Exception
 	{
+		//MyLog.d("RGI", "TX: " + payload);
 		OperationalProtocolPacket packet = OperationalProtocolPacket.getPayloadRequest(payload);
 		ByteBuffer byteBuffer = OperationalProtocolPacket.encode(packet);
 		writer.write(byteBuffer.array());
+		writer.flush();
 	}
-
+	
 	public RemoteGameInterfaceConfiguration getConfiguration() {
 		return configuration;
 	}
-
+	
 	private void setConfiguration(RemoteGameInterfaceConfiguration configuration) {
 		this.configuration = configuration;
 	}
@@ -688,10 +761,10 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 		
 		remoteGameInterfaceDisplayLocation.setLongitude(getConfiguration().Longitude);
 		remoteGameInterfaceDisplayLocation.setLatitude(getConfiguration().Latitude);
-		if(location.distanceTo(remoteGameInterfaceDisplayLocation) > getConfiguration().AvailabilityRadius)
+		if (location.distanceTo(remoteGameInterfaceDisplayLocation) > getConfiguration().AvailabilityRadius)
 		{
 			state = RemoteGameInterfaceState.NotCloseEnough;
-			for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+			for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 			{
 				delegate.didCheckState();
 			}
@@ -699,32 +772,32 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 			return;
 		}
 		
-		if(getConfiguration().Infrastructure.equals(RemoteGameInterfaceInfrastucture.AdHoc))
+		if (getConfiguration().Infrastructure.equals(RemoteGameInterfaceInfrastucture.AdHoc))
 		{
-			if(!Utils.isConnectedToWiFi(activity))
+			if (!C.isConnectedToWiFi(activity))
 			{
 				state = RemoteGameInterfaceState.AdHocInfrastrucureAndNotConnectedToCorrectAccessPoint;
-				for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+				for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 				{
 					delegate.didCheckState();
 				}
 				lm.stopLocating();
 				return;
 			}
-			if(!Utils.getWiFiSSID(activity).equals(getConfiguration().AdHocAccessPointSSID)){
+			if (!BlissNetworkUtils.getWiFiSSID(activity).equals(getConfiguration().AdHocAccessPointSSID)) {
 				state = RemoteGameInterfaceState.AdHocInfrastrucureAndNotConnectedToCorrectAccessPoint;
-				for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+				for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 				{
 					delegate.didCheckState();
 				}
 				lm.stopLocating();
 				return;
 			}
-			if(getConfiguration().AdHocAccessPointBSSID != null && 
-					!getConfiguration().AdHocAccessPointBSSID.equals("") &&
-					Utils.getWiFiBSSID(activity).equals(getConfiguration().AdHocAccessPointBSSID)){
+			if (getConfiguration().AdHocAccessPointBSSID != null &&
+			  !getConfiguration().AdHocAccessPointBSSID.equals("") &&
+			  BlissNetworkUtils.getWiFiBSSID(activity).equals(getConfiguration().AdHocAccessPointBSSID)) {
 				state = RemoteGameInterfaceState.AdHocInfrastrucureAndNotConnectedToCorrectAccessPoint;
-				for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+				for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 				{
 					delegate.didCheckState();
 				}
@@ -739,12 +812,11 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 		{
 			this.connect(getConfiguration().Endpoint, getConfiguration().Port);
 			lm.stopLocating();
-		}
-		catch(Exception ex)
+		} catch (Exception ex)
 		{
 			checkingState = false;
 			state = RemoteGameInterfaceState.NotAvailable;
-			for (IRemoteGameInterfaceEngineDelegate delegate : delegates) 
+			for (IRemoteGameInterfaceEngineDelegate delegate : delegates)
 			{
 				delegate.didCheckState();
 			}
@@ -753,33 +825,28 @@ public class RemoteGameInterfaceEngine implements ILocationListener
 		}
 		
 	}
+
+	@Override
+	public void onProviderDisabled(String provider) {}
 	
 	@Override
-	public void onProviderDisabled(String provider) {
-	}
-
-	@Override
-	public void onProviderEnabled(String provider) {
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-	}
-
-	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-	}
+	public void onProviderEnabled(String provider) {}
 	
-	public boolean GPSAvailable() 
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {}
+	
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+	
+	public boolean GPSAvailable()
 	{
-    LocationManager loc_manager = (LocationManager)activity.getSystemService(Context.LOCATION_SERVICE);
-    List<String> str = loc_manager.getProviders(true);
-
-    if(str.size()>0)
-        return true;
-    else
-        return false;
-}
-
+		LocationManager loc_manager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+		List<String> str = loc_manager.getProviders(true);
+		
+		if (str.size() > 0)
+			return true;
+		else
+			return false;
+	}
 	
 }

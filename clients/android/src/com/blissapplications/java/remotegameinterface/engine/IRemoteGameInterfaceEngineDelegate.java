@@ -13,5 +13,5 @@ public interface IRemoteGameInterfaceEngineDelegate
 	
 	void didReceiveHandshakeResponse();
 	void didReceiveScore(float score);
-	void didReceiveFinish(float score);
+	void didReceiveFinish(int score, int items, int penalties);
 }
