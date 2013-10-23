@@ -17,7 +17,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="servers" />
     <orderEntry type="module" module-name="AndEngine" />
-    <orderEntry type="module" module-name="Bliss-Utils-Android" />
   </component>
 </module>
 
