@@ -16,10 +16,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="servers" />
     <orderEntry type="module" module-name="AndEngine" />
     <orderEntry type="module" module-name="bliss-utils-android" />
     <orderEntry type="module" module-name="bliss-location-android" />
+    <orderEntry type="module" module-name="RemoteGameInterfaceServer" />
   </component>
 </module>
 
