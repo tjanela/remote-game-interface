@@ -10,12 +10,7 @@ import java.util.List;
 
 import com.blissapplications.android.location.BlissLocationManager;
 import com.blissapplications.android.location.ILocationListener;
-import com.blissapplications.android.utils.BlissJsonUtils;
-import com.blissapplications.android.utils.BlissNetworkUtils;
-import com.blissapplications.android.utils.BlissStringUtils;
 import com.blissapplications.android.utils.Connectivity;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
