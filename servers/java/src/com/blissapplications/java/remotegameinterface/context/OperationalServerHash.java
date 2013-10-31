@@ -19,7 +19,7 @@ public class OperationalServerHash {
 	public static final int HASH_SIZE = 7;
 	//private static String _alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
 	private static String _alphabet = "0123456789";
-	private static Logger _logger = Logger.getLogger(OperationalServerHash.class);
+	private static Logger _logger;
 	private char[] hash;
 	private static Random _random;
 	
@@ -27,7 +27,7 @@ public class OperationalServerHash {
 		try{
 			_random = SecureRandom.getInstance("SHA1PRNG");
 		}catch(Exception ex){
-			_logger.error("Couldn't create SecureRandom: ", ex);
+			getLogger().error("Couldn't create SecureRandom: ", ex);
 		}
 		
 	}
@@ -82,4 +82,11 @@ public class OperationalServerHash {
 	public String toString(){
 		return new String(hash);
 	}
+
+  private static Logger getLogger(){
+    if(_logger == null){
+      _logger = Logger.getLogger(OperationalServerHash.class);
+    }
+    return _logger;
+  }
 }
