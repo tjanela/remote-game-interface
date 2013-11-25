@@ -588,10 +588,12 @@
 		E265FA33148AA43D004A1114 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Miguel Osorio (YQBV4MN3VH)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RGIApp/RGIApp-Prefix.pch";
 				INFOPLIST_FILE = "RGIApp/RGIApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "6BA2A65E-76A2-46D1-B965-81A688DD09BD";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -599,10 +601,12 @@
 		E265FA34148AA43D004A1114 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Miguel Osorio (YQBV4MN3VH)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RGIApp/RGIApp-Prefix.pch";
 				INFOPLIST_FILE = "RGIApp/RGIApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "6BA2A65E-76A2-46D1-B965-81A688DD09BD";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
