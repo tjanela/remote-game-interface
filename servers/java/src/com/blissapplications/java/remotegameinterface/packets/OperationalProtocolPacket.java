@@ -15,7 +15,7 @@ import com.blissapplications.java.remotegameinterface.context.OperationalServerH
  * Time: 4:27 AM
  */
 public class OperationalProtocolPacket {
-	private static Logger _logger = Logger.getLogger(OperationalProtocolPacket.class);
+	private static Logger _logger;
 	public static final int ID_FIELD_LENGTH = 3;
 	
 	public static final String ERROR_ALREADY_REGISTERED_PAYLOAD = "ALREADY_REGISTERED";
@@ -133,7 +133,7 @@ public class OperationalProtocolPacket {
 		int payloadSize = request.capacity() - ID_FIELD_LENGTH - MAGIC_FIELD_LENGTH;
 		
 		if(payloadSize < 0){
-			_logger.error("Error decoding packet " + request.toString());
+			getLogger().error("Error decoding packet " + request.toString());
 			return null;
 		}
 		
@@ -188,4 +188,11 @@ public class OperationalProtocolPacket {
 		
 		return sb.toString();
 	}
+
+  private static Logger getLogger(){
+    if(_logger == null){
+      _logger= Logger.getLogger(OperationalProtocolPacket.class);
+    }
+    return _logger;
+  }
 }

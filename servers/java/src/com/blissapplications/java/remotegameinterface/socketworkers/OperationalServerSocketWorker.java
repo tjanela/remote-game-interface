@@ -18,7 +18,7 @@ import java.util.List;
  * Time: 3:27 AM
  */
 public class OperationalServerSocketWorker extends ServerSocketWorker {
-	public static final Logger _logger = Logger.getLogger(OperationalServerSocketWorker.class);
+	public static Logger _logger;
 
 	public Boolean _exit;
 
@@ -35,7 +35,7 @@ public class OperationalServerSocketWorker extends ServerSocketWorker {
 	}
 
 	public void run() {
-		_logger.info("Running operational server...");
+		getLogger().info("Running operational server...");
 		while (!_exit) {
 			try {
 				Socket operationalClient = _socket.accept();
@@ -50,23 +50,23 @@ public class OperationalServerSocketWorker extends ServerSocketWorker {
 
 			} catch (SocketException ex) {
 				if (!_exit) {
-					_logger.error("Error on operational server", ex);
+          getLogger().error("Error on operational server", ex);
 				}
 			} catch (Exception ex) {
-				_logger.error("Error on operational server", ex);
+        getLogger().error("Error on operational server", ex);
 			}
 		}
-		_logger.info("Exiting operational server.");
+    getLogger().info("Exiting operational server.");
 	}
 
 	public void clientServed(IClientConnection servedClient) {
-		_logger.info(String.format("Client has been served by operational server."));
+    getLogger().info(String.format("Client has been served by operational server."));
 		
 		synchronized (this) {
 			if (_operationalServerClientConnections.contains(servedClient)) {
 				_operationalServerClientConnections.remove(servedClient);
 			} else {
-				_logger.warn(String.format("Client not found on operational server internal state! Proceeding..."));
+        getLogger().warn(String.format("Client not found on operational server internal state! Proceeding..."));
 			}
 			
 			try
@@ -75,18 +75,18 @@ public class OperationalServerSocketWorker extends ServerSocketWorker {
 			}
 			catch(Exception ex)
 			{
-				_logger.error(String.format("Client Exception on clientServed(IClientConnection):"), ex);
+        getLogger().error(String.format("Client Exception on clientServed(IClientConnection):"), ex);
 			}
 		}
 	}
 	
 	public void clientDisconnected(IClientConnection disconnectedClient) {
-		_logger.info(String.format("Client %1$s has disconnected.", disconnectedClient));
+    getLogger().info(String.format("Client %1$s has disconnected.", disconnectedClient));
 		synchronized (this) {
 			if (_operationalServerClientConnections.contains(disconnectedClient)) {
 				_operationalServerClientConnections.remove(disconnectedClient);
 			} else {
-				_logger.warn(String.format("Client not found on operational server internal state! Proceeding..."));
+        getLogger().warn(String.format("Client not found on operational server internal state! Proceeding..."));
 			}
 			try
 			{
@@ -94,7 +94,7 @@ public class OperationalServerSocketWorker extends ServerSocketWorker {
 			}
 			catch(Exception ex)
 			{
-				_logger.error(String.format("Client Exception on clientDisconnected(IClientConnection):"), ex);
+        getLogger().error(String.format("Client Exception on clientDisconnected(IClientConnection):"), ex);
 			}
 		}
 	}
@@ -102,5 +102,12 @@ public class OperationalServerSocketWorker extends ServerSocketWorker {
 	public void exit() {
 		_exit = Boolean.TRUE;
 	}
+
+  private static Logger getLogger(){
+    if(_logger == null){
+      _logger= Logger.getLogger(OperationalServerSocketWorker.class);
+    }
+    return _logger;
+  }
 
 }

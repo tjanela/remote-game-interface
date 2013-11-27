@@ -4,6 +4,7 @@
     <facet type="android" name="Android">
       <configuration>
         <option name="LIBRARY_PROJECT" value="true" />
+        <option name="UPDATE_PROPERTY_FILES" value="false" />
       </configuration>
     </facet>
   </component>
@@ -15,8 +16,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="servers" />
     <orderEntry type="module" module-name="AndEngine" />
+    <orderEntry type="module" module-name="Bliss-utils-android" />
+    <orderEntry type="module" module-name="Bliss-location-android" />
+    <orderEntry type="module" module-name="RemoteGameInterfaceServer" />
   </component>
 </module>
 

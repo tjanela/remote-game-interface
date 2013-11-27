@@ -16,7 +16,7 @@ import java.util.Arrays;
  * Time: 3:11 AM
  */
 public class OperationalServerClientConnection implements Runnable,IClientConnection  {
-	public static final Logger _logger = Logger.getLogger(OperationalServerClientConnection.class);
+	public static Logger _logger;
 
 	private Socket _clientSocket;
 
@@ -32,12 +32,12 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 
 	public void run(){
 		try{
-			_logger.info(String.format("Serving client %1$s...",_clientSocket.getInetAddress().getHostAddress()));
+			getLogger().info(String.format("Serving client %1$s...",_clientSocket.getInetAddress().getHostAddress()));
 			serveClient();
-			_logger.info(String.format("Client %1$s served.",_clientSocket.getInetAddress().getHostAddress()));
+      getLogger().info(String.format("Client %1$s served.",_clientSocket.getInetAddress().getHostAddress()));
 		}
 		catch (Exception ex){
-			_logger.error(String.format("Error serving client %1$s",_clientSocket.getInetAddress().getHostAddress()),ex);
+      getLogger().error(String.format("Error serving client %1$s",_clientSocket.getInetAddress().getHostAddress()),ex);
 		}
 	}
 
@@ -55,22 +55,22 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 				request = readRequest();
 
 				if(request == null || request.capacity() == 0){
-					_logger.debug("Empty message. Exiting service loop...");
+          getLogger().debug("Empty message. Exiting service loop...");
 					exit = Boolean.TRUE;
 					continue;
 				}
 
-				_logger.debug(String.format("Got Request: %1$s", request));
+        getLogger().debug(String.format("Got Request: %1$s", request));
 				response = responseForRequest(request);
 
 				if(response != null){
-					_logger.debug(String.format("Will respond: %1$s", response));
+          getLogger().debug(String.format("Will respond: %1$s", response));
 					writeData(response);
 				}else{
-					_logger.debug("Got null response.");
+          getLogger().debug("Got null response.");
 				}
 			}catch(SocketException ex){
-				_logger.error("Error serving client: ", ex);
+        getLogger().error("Error serving client: ", ex);
 				_delegate.clientDisconnected(this);
 				exit = Boolean.TRUE;
 				throw ex;
@@ -124,4 +124,11 @@ public class OperationalServerClientConnection implements Runnable,IClientConnec
 
 		return trimmedByteBuffer;
 	}
+
+  private static Logger getLogger(){
+    if(_logger == null){
+      _logger = Logger.getLogger(OperationalServerClientConnection.class);
+    }
+    return _logger;
+  }
 }

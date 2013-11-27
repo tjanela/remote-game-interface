@@ -36,7 +36,7 @@ public class OperationalServerContext {
 		}
 	}
 	
-	private static Logger _logger = Logger.getLogger(OperationalServerContext.class);
+	private static Logger _logger;
 	public List<IClientConnection> _displayClients;
 	public List<IClientConnection> _controlClients;
 
@@ -115,10 +115,10 @@ public class OperationalServerContext {
 				
 				
 				if(controlClient != null){
-					_logger.debug(String.format("Payload Request from DisplayClient[%1$s]: %2$s", hash,request.toString()));
+					getLogger().debug(String.format("Payload Request from DisplayClient[%1$s]: %2$s", hash,request.toString()));
 					controlClient.writeData(OperationalProtocolPacket.encode(request));
 				}else {
-					_logger.debug(String.format("Payload Request from DisplayClient[%1$s] %2$s has no ControlClient", hash, request.toString()));
+          getLogger().debug(String.format("Payload Request from DisplayClient[%1$s] %2$s has no ControlClient", hash, request.toString()));
 				}
 			}
 			else if(isControlClient(client)){
@@ -126,14 +126,14 @@ public class OperationalServerContext {
 				IClientConnection displayClient = getDisplayClient(hash);
 				//response = OperationalProtocolPacket.getPayloadResponse();
 				if(displayClient != null){
-					_logger.debug(String.format("Payload Request from ControlClient[%1$s]: %2$s", hash, request.toString()));
+          getLogger().debug(String.format("Payload Request from ControlClient[%1$s]: %2$s", hash, request.toString()));
 					displayClient.writeData(OperationalProtocolPacket.encode(request));
 				}else {
-					_logger.debug(String.format("Payload Request from ControlClient[%1$s] %2$s has no DisplayClient", hash, request.toString()));
+          getLogger().debug(String.format("Payload Request from ControlClient[%1$s] %2$s has no DisplayClient", hash, request.toString()));
 				}
 			}
 			else{
-				_logger.info("Client with payload request is not known ...");
+        getLogger().info("Client with payload request is not known ...");
 			}
 			break;
 		}
@@ -156,7 +156,7 @@ public class OperationalServerContext {
 		
 		if(isControlClient(client)){
 			OperationalServerHash hash = _controlClientHashes.get(client);
-			_logger.info("Handling control client disconnection...");
+      getLogger().info("Handling control client disconnection...");
 			if(hash == null){
 				throw new Exception("Client not registered!");
 			}
@@ -168,7 +168,7 @@ public class OperationalServerContext {
 				displayClient.writeData(OperationalProtocolPacket.encode(packet));
 			}
 			else {
-				_logger.info("No Display client on handleClientDisconnect for hash: " + hash);
+        getLogger().info("No Display client on handleClientDisconnect for hash: " + hash);
 			}
 			
 			//Remove client from internal data
@@ -180,7 +180,7 @@ public class OperationalServerContext {
 			_hashToPairMap.put(hash, pair);
 			
 		}else if(isDisplayClient(client)){
-			_logger.info("Handling display client disconnection...");
+      getLogger().info("Handling display client disconnection...");
 			OperationalServerHash hash = _displayClientHashes.get(client);
 			
 			if(hash == null){
@@ -193,7 +193,7 @@ public class OperationalServerContext {
 				controlClient.writeData(OperationalProtocolPacket.encode(packet));
 			}
 			else {
-				_logger.info("No Control client on handleClientDisconnect for hash: " + hash);
+        getLogger().info("No Control client on handleClientDisconnect for hash: " + hash);
 			}
 			
 			//remove client from control data
@@ -205,7 +205,7 @@ public class OperationalServerContext {
 			pair = Pair.of(null, pair.snd);
 			_hashToPairMap.put(hash, pair);
 		}else {
-			_logger.info("Disconnect from unknown client...");
+      getLogger().info("Disconnect from unknown client...");
 		}
 	}
 
@@ -215,7 +215,7 @@ public class OperationalServerContext {
 				OperationalServerHash hash = OperationalServerHash.newHash();
 
 				if(_hashToPairMap.containsKey(hash)){
-					_logger.info(String.format("Map already contains hash: '%1$s'. Setting anyway ",hash));
+          getLogger().info(String.format("Map already contains hash: '%1$s'. Setting anyway ",hash));
 					Pair<IClientConnection,IClientConnection> pair = _hashToPairMap.get(hash);
 					
 					if(pair.fst == null){
@@ -230,7 +230,7 @@ public class OperationalServerContext {
 						return DisplayClientRegistrationReturnObject.returnObject(ClientRegistrationReturnCode.ClientRegistrationFailed_AlreadyRegisteredClient, null);
 					}
 				}else{
-					_logger.info(String.format("Registering display client with hash %1$s",hash));
+          getLogger().info(String.format("Registering display client with hash %1$s",hash));
 					Pair<IClientConnection,IClientConnection> pair = Pair.of(client,null);
 					_hashToPairMap.put(hash,pair);
 
@@ -247,7 +247,7 @@ public class OperationalServerContext {
 	}
 	public ClientRegistrationReturnCode registerControlClient(OperationalServerHash hash, IClientConnection client){
 		synchronized (this){
-			_logger.info(String.format("Registering control client with hash %1$s",hash));
+      getLogger().info(String.format("Registering control client with hash %1$s",hash));
 			if(!_controlClients.contains(client)){
 				if(_hashToPairMap.containsKey(hash)){
 					Pair<IClientConnection,IClientConnection> pair = _hashToPairMap.get(hash);
@@ -264,12 +264,12 @@ public class OperationalServerContext {
 						return ClientRegistrationReturnCode.ClientRegistrationFailed_AlreadyRegisteredClient;
 					}
 				}else{
-					_logger.warn(String.format("Asking to register a control client with no display client. Hash is %1$s. Returning error...", hash));
+          getLogger().warn(String.format("Asking to register a control client with no display client. Hash is %1$s. Returning error...", hash));
 					return ClientRegistrationReturnCode.ClientRegistrationFailed_UnknownHash;
 				}
 			}
 			else{
-				_logger.warn(String.format("Asking to register an already registered control client. Hash is %1$s. Returning error...",hash));
+        getLogger().warn(String.format("Asking to register an already registered control client. Hash is %1$s. Returning error...",hash));
 				return ClientRegistrationReturnCode.ClientRegistrationFailed_AlreadyRegisteredClient;
 			}
 		}
@@ -307,4 +307,11 @@ public class OperationalServerContext {
 		}
 		return _operationalServerContextInstance;
 	}
+
+  private static Logger getLogger(){
+    if(_logger == null){
+      _logger = Logger.getLogger(OperationalServerContext.class);
+    }
+    return _logger;
+  }
 }
