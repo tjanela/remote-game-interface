@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rgi_invalid_code">Invalid Code</string>
+    <string name="rgi_error_occured">An Error Occured</string>
+    <string name="rgi_already_used_code">Code Already In Use</string>
+    <string name="rgi_server_disconnected">Server Disconnected</string>
+</resources>
